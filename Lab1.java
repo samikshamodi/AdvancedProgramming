@@ -117,12 +117,16 @@ class Camp {
                 }
             }
         }
+
+        if(h.availableBeds<=0)
+            h.admissionOpen=false;
     }
 
 
     //Query 2
     void removeAdmittedAccount() {
         ArrayList<Patient> toRemove=new ArrayList<Patient>();
+        System.out.println("Account ID removed of admitted patients");
         for (Patient p : patientList) {
             if (p.admitted) {
                 System.out.println(p.id);
@@ -137,6 +141,25 @@ class Camp {
 
     }
 
+    //Query 3
+    void removeClosedAccount()
+    {
+        ArrayList<Healthcare> toRemove=new ArrayList<Healthcare>();
+        System.out.println("Accounts removed of Institute whose admission is closed");
+        for (Healthcare h : healthcareList) {
+            if (!h.admissionOpen) {
+                System.out.println(h.name);
+                toRemove.add(h);
+            }
+        }
+
+        for (Healthcare x: toRemove)
+        {
+            healthcareList.remove(x);
+        }
+    }
+
+
     //Query 4
     int unassignedCount() {
         int cnt = 0;
@@ -145,6 +168,30 @@ class Camp {
                 cnt++;
         }
         return cnt;
+    }
+
+    //Query 5
+    int displayOpenAccount()
+    {
+        int cnt=0;
+        for (Healthcare h : healthcareList)
+        {
+            if(h.admissionOpen)
+                cnt++;
+        }
+        return cnt;
+    }
+
+    //Query 6
+    void displayParticularHealthcare(String s)
+    {
+        for (Healthcare h:healthcareList)
+        {
+            if(h.name.equals(s))
+            {
+                h.display();
+            }
+        }
     }
 
     //Query 7
@@ -170,6 +217,18 @@ class Camp {
         for (Patient p : patientList)
             System.out.println(p.id + " " + p.name);
     }
+
+    //Query 9
+    void displayPatientInInstitute(String s){
+        for (Patient p:patientList)
+        {
+            if(p.Institute!=null && p.Institute.name.equals(s))
+            {
+                System.out.println(p.name+", recovery time is "+p.recoveryDays+" days");
+            }
+        }
+    }
+
 
     void display() {
         for (Patient p : patientList)
@@ -215,13 +274,17 @@ public class Lab1 {
                     camp.removeAdmittedAccount();
                     break;
                 case 3:
+                    camp.removeClosedAccount();
                     break;
                 case 4:
                     System.out.println(camp.unassignedCount()+" patients");
                     break;
                 case 5:
+                    System.out.println(camp.displayOpenAccount()+" institutes are admitting patients currently");
                     break;
                 case 6:
+                    String s=in.next();
+                    camp.displayParticularHealthcare(s);
                     break;
                 case 7:
                     //System.out.print("Input Patient id whose details to display: ");
@@ -232,6 +295,8 @@ public class Lab1 {
                     camp.displayAllPatients();
                     break;
                 case 9:
+                    String st=in.next();
+                    camp.displayPatientInInstitute(st);
                     break;
 
             }
