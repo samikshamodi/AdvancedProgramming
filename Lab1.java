@@ -36,6 +36,31 @@ class Patient {
     void setRecoveryDays(int r) {
         recoveryDays = r;
     }
+
+    //Query 7
+    void displayParticularPatient() {
+        System.out.println(name);
+        System.out.println("Temperature is " + temp);
+        System.out.println("Oxygen level is " + olevel);
+
+        System.out.print("Admission Status - ");
+        if (admitted) {
+            System.out.println("Admitted");
+            System.out.println("Admitting Institute - " + Institute.name);
+        } else
+            System.out.println("Not Admitted");
+    }
+
+    //Query 8
+    void displayAllPatients() {
+        System.out.println(id + " " + name);
+    }
+
+    //Query 9
+    void displayPatientInInstitute() {
+        System.out.println(name + ", recovery time is " + recoveryDays + " days");
+    }
+
 }
 
 class Healthcare {
@@ -92,8 +117,7 @@ class Camp {
             id++;
         }
     }
-
-
+    
     //Query 1
     void addHealthcareInstitute() {
         System.out.println("Details of Healthcare Institute to be added");
@@ -153,6 +177,7 @@ class Camp {
             }
         }
 
+        //if no more beds available, set status to closed
         if (h.availableBeds <= 0)
             h.admissionOpen = false;
     }
@@ -225,16 +250,7 @@ class Camp {
     void displayParticularPatient(int id) {
         for (Patient p : patientList) {
             if (p.id == id) {
-                System.out.println(p.name);
-                System.out.println("Temperature is " + p.temp);
-                System.out.println("Oxygen level is " + p.olevel);
-
-                System.out.print("Admission Status - ");
-                if (p.admitted) {
-                    System.out.println("Admitted");
-                    System.out.println("Admitting Institute - " + p.Institute.name);
-                } else
-                    System.out.println("Not Admitted");
+                p.displayParticularPatient();
             }
         }
     }
@@ -242,23 +258,17 @@ class Camp {
     //Query 8
     void displayAllPatients() {
         for (Patient p : patientList)
-            System.out.println(p.id + " " + p.name);
+            p.displayAllPatients();
     }
 
     //Query 9
     void displayPatientInInstitute(String s) {
         for (Patient p : patientList) {
             if (p.Institute != null && p.Institute.name.equals(s)) {
-                System.out.println(p.name + ", recovery time is " + p.recoveryDays + " days");
+                p.displayPatientInInstitute();
             }
         }
     }
-
-    void display() {
-        for (Patient p : patientList)
-            System.out.println(p.id + " " + p.name + " " + p.temp + " " + p.olevel + " " + p.age);
-    }
-
 }
 
 public class Lab1 {
@@ -305,13 +315,3 @@ public class Lab1 {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
