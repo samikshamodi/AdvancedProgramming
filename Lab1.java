@@ -172,7 +172,7 @@ class Camp {
                 break;
 
             if (!p.admitted) {
-                if (p.olevel <= h.maxTemp) {
+                if (p.temp <= h.maxTemp) {
                     p.admitted = true;
                     h.availableBeds -= 1;
                     p.setInstitute(h);
