@@ -106,7 +106,10 @@ class Camp {
 
     void addPatients() {
 
+        System.out.print("Input number of patients in camp: ");
         int n = in.nextInt();
+        System.out.println("Input details of patients present is camp");
+        System.out.println("(Name    Temperature    Oxygen Levels    Age)");
         int id = 1;
         for (int i = 0; i < n; i += 1) {
             String name = in.next();
@@ -117,7 +120,7 @@ class Camp {
             id++;
         }
     }
-    
+
     //Query 1
     void addHealthcareInstitute() {
         System.out.println("Details of Healthcare Institute to be added");
@@ -279,6 +282,7 @@ public class Lab1 {
         camp.addPatients();
 
         while (camp.unassignedCount() > 0) {
+            System.out.print("Input Query: ");
             int query = in.nextInt();
             switch (query) {
                 case 1:
@@ -315,3 +319,13 @@ public class Lab1 {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
