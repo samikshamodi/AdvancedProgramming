@@ -1,3 +1,12 @@
+/*input
+5
+Ram 98.4 94 25
+Sam 100.4 92 55
+Jim 104 91 61
+Tim 99 93 60
+Kim 100 91 48
+ */
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -61,16 +70,42 @@ class Healthcare {
 }
 
 class Camp {
-    ArrayList<Patient> patientList = new ArrayList<Patient>();
-    ArrayList<Healthcare> healthcareList = new ArrayList<Healthcare>();
+    ArrayList<Patient> patientList;
+    ArrayList<Healthcare> healthcareList;
     Scanner in = new Scanner(System.in);
 
-    Camp(ArrayList<Patient> l) {
-        patientList = l;
+    Camp() {
+        patientList = new ArrayList<Patient>();
+        healthcareList = new ArrayList<Healthcare>();
     }
 
+    void addPatients() {
+
+        int n = in.nextInt();
+        int id = 1;
+        for (int i = 0; i < n; i += 1) {
+            String name = in.next();
+            float temp = in.nextFloat();
+            int olevel = in.nextInt();
+            int age = in.nextInt();
+            patientList.add(new Patient(id, name, temp, olevel, age));
+            id++;
+        }
+    }
+
+
     //Query 1
-    void addHealthcareInstitute(Healthcare h) {
+    void addHealthcareInstitute() {
+        System.out.println("Details of Healthcare Institute to be added");
+        System.out.print("Name: ");
+        String name = in.next();
+        System.out.print("Temperature Criteria - ");
+        float temp = in.nextFloat();
+        System.out.print("Oxygen Levels - ");
+        int olevel = in.nextInt();
+        System.out.print("Number of Available beds - ");
+        int beds = in.nextInt();
+        Healthcare h = new Healthcare(name, temp, olevel, beds);
         healthcareList.add(h);
         admitPatients(h);
     }
@@ -91,7 +126,7 @@ class Camp {
             if (!p.admitted) {
                 if (p.olevel >= h.minOxy) {
                     p.admitted = true;
-                    h.availableBeds-=1;
+                    h.availableBeds -= 1;
                     p.setInstitute(h);
                     System.out.print("Recovery days for admitted patient ID " + p.id + "- ");
                     int r = in.nextInt();
@@ -109,7 +144,7 @@ class Camp {
             if (!p.admitted) {
                 if (p.olevel <= h.maxTemp) {
                     p.admitted = true;
-                    h.availableBeds-=1;
+                    h.availableBeds -= 1;
                     p.setInstitute(h);
                     System.out.print("Recovery days for admitted patient ID " + p.id + "- ");
                     int r = in.nextInt();
@@ -118,14 +153,14 @@ class Camp {
             }
         }
 
-        if(h.availableBeds<=0)
-            h.admissionOpen=false;
+        if (h.availableBeds <= 0)
+            h.admissionOpen = false;
     }
 
 
     //Query 2
     void removeAdmittedAccount() {
-        ArrayList<Patient> toRemove=new ArrayList<Patient>();
+        ArrayList<Patient> toRemove = new ArrayList<Patient>();
         System.out.println("Account ID removed of admitted patients");
         for (Patient p : patientList) {
             if (p.admitted) {
@@ -134,17 +169,15 @@ class Camp {
             }
         }
 
-        for (Patient x: toRemove)
-        {
+        for (Patient x : toRemove) {
             patientList.remove(x);
         }
 
     }
 
     //Query 3
-    void removeClosedAccount()
-    {
-        ArrayList<Healthcare> toRemove=new ArrayList<Healthcare>();
+    void removeClosedAccount() {
+        ArrayList<Healthcare> toRemove = new ArrayList<Healthcare>();
         System.out.println("Accounts removed of Institute whose admission is closed");
         for (Healthcare h : healthcareList) {
             if (!h.admissionOpen) {
@@ -153,8 +186,7 @@ class Camp {
             }
         }
 
-        for (Healthcare x: toRemove)
-        {
+        for (Healthcare x : toRemove) {
             healthcareList.remove(x);
         }
     }
@@ -171,24 +203,19 @@ class Camp {
     }
 
     //Query 5
-    int displayOpenAccount()
-    {
-        int cnt=0;
-        for (Healthcare h : healthcareList)
-        {
-            if(h.admissionOpen)
+    int displayOpenAccount() {
+        int cnt = 0;
+        for (Healthcare h : healthcareList) {
+            if (h.admissionOpen)
                 cnt++;
         }
         return cnt;
     }
 
     //Query 6
-    void displayParticularHealthcare(String s)
-    {
-        for (Healthcare h:healthcareList)
-        {
-            if(h.name.equals(s))
-            {
+    void displayParticularHealthcare(String s) {
+        for (Healthcare h : healthcareList) {
+            if (h.name.equals(s)) {
                 h.display();
             }
         }
@@ -219,16 +246,13 @@ class Camp {
     }
 
     //Query 9
-    void displayPatientInInstitute(String s){
-        for (Patient p:patientList)
-        {
-            if(p.Institute!=null && p.Institute.name.equals(s))
-            {
-                System.out.println(p.name+", recovery time is "+p.recoveryDays+" days");
+    void displayPatientInInstitute(String s) {
+        for (Patient p : patientList) {
+            if (p.Institute != null && p.Institute.name.equals(s)) {
+                System.out.println(p.name + ", recovery time is " + p.recoveryDays + " days");
             }
         }
     }
-
 
     void display() {
         for (Patient p : patientList)
@@ -240,35 +264,15 @@ class Camp {
 public class Lab1 {
 
     public static void main(String[] args) {
-        ArrayList<Patient> list = new ArrayList<Patient>();
         Scanner in = new Scanner(System.in);
-        int n = in.nextInt();
-        int id = 1;
-        for (int i = 0; i < n; i += 1) {
-            String name = in.next();
-            float temp = in.nextFloat();
-            int olevel = in.nextInt();
-            int age = in.nextInt();
-            list.add(new Patient(id, name, temp, olevel, age));
-            id++;
-        }
-
-        Camp camp = new Camp(list);
+        Camp camp = new Camp();
+        camp.addPatients();
 
         while (camp.unassignedCount() > 0) {
             int query = in.nextInt();
             switch (query) {
                 case 1:
-                    System.out.println("Details of Healthcare Institute to be added");
-                    System.out.print("Name: ");
-                    String name = in.next();
-                    System.out.print("Temperature Criteria - ");
-                    float temp = in.nextFloat();
-                    System.out.print("Oxygen Levels - ");
-                    int olevel = in.nextInt();
-                    System.out.print("Number of Available beds - ");
-                    int beds = in.nextInt();
-                    camp.addHealthcareInstitute(new Healthcare(name, temp, olevel, beds));
+                    camp.addHealthcareInstitute();
                     break;
                 case 2:
                     camp.removeAdmittedAccount();
@@ -277,17 +281,16 @@ public class Lab1 {
                     camp.removeClosedAccount();
                     break;
                 case 4:
-                    System.out.println(camp.unassignedCount()+" patients");
+                    System.out.println(camp.unassignedCount() + " patients");
                     break;
                 case 5:
-                    System.out.println(camp.displayOpenAccount()+" institutes are admitting patients currently");
+                    System.out.println(camp.displayOpenAccount() + " institutes are admitting patients currently");
                     break;
                 case 6:
-                    String s=in.next();
+                    String s = in.next();
                     camp.displayParticularHealthcare(s);
                     break;
                 case 7:
-                    //System.out.print("Input Patient id whose details to display: ");
                     int x = in.nextInt();
                     camp.displayParticularPatient(x);
                     break;
@@ -295,12 +298,10 @@ public class Lab1 {
                     camp.displayAllPatients();
                     break;
                 case 9:
-                    String st=in.next();
+                    String st = in.next();
                     camp.displayPatientInInstitute(st);
                     break;
-
             }
-
         }
     }
 }
