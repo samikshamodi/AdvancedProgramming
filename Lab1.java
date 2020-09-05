@@ -20,7 +20,7 @@ class Patient {
     int olevel;
     int age;
     boolean admitted; //false if not admitted. true if admitted
-    Healthcare Institute;
+    String institute; //null if not assigned
     int recoveryDays;
 
     Patient(int i, String n, float t, int o, int a) {
@@ -30,14 +30,15 @@ class Patient {
         olevel = o;
         age = a;
         admitted = false;
+        institute=null;
     }
 
-    void setInstitute(Healthcare h) {
-        Institute = h;
-    }
-
-    void setRecoveryDays(int r) {
-        recoveryDays = r;
+    //Query 1
+    void getAdmission(String h,int r)
+    {
+        admitted = true;
+        institute=h;
+        recoveryDays=r;
     }
 
     //Query 7
@@ -49,7 +50,7 @@ class Patient {
         System.out.print("Admission Status - ");
         if (admitted) {
             System.out.println("Admitted");
-            System.out.println("Admitting Institute - " + Institute.name);
+            System.out.println("Admitting Institute - " + institute);
         } else
             System.out.println("Not Admitted");
     }
@@ -103,8 +104,8 @@ class Camp {
     Scanner in = new Scanner(System.in);
 
     Camp() {
-        patientList = new ArrayList<Patient>();
-        healthcareList = new ArrayList<Healthcare>();
+        patientList = new ArrayList<>();
+        healthcareList = new ArrayList<>();
     }
 
     void addPatients() {
@@ -137,15 +138,9 @@ class Camp {
         int beds = in.nextInt();
         Healthcare h = new Healthcare(name, temp, olevel, beds);
         healthcareList.add(h);
-        admitPatients(h);
-    }
 
-    void admitPatients(Healthcare h) {
-
-        //if beds available then check if a patient is admitted
-        //if not admitted then check eligibility criteria
-        //first fill all beds with oxy level criteria
-        //if still beds left then fill with body temp criteria
+        //if beds available then check if a patient is admitted. If not admitted then check eligibility criteria
+        //first fill all beds with oxy level criteria. If still beds left then fill with body temp criteria
 
         //According to oxy level criteria
         for (Patient p : patientList) {
@@ -153,14 +148,14 @@ class Camp {
             if (h.availableBeds <= 0)
                 break;
 
+            //All the attributes of patient and healthcare are checked here since i don't want
+            //either of them to be accessible by the other.
             if (!p.admitted) {
                 if (p.olevel >= h.minOxy) {
-                    p.admitted = true;
-                    h.availableBeds -= 1;
-                    p.setInstitute(h);
                     System.out.print("Recovery days for admitted patient ID " + p.id + "- ");
                     int r = in.nextInt();
-                    p.setRecoveryDays(r);
+                    p.getAdmission(h.name,r);
+                    h.availableBeds-=1;
                 }
             }
         }
@@ -173,12 +168,10 @@ class Camp {
 
             if (!p.admitted) {
                 if (p.temp <= h.maxTemp) {
-                    p.admitted = true;
-                    h.availableBeds -= 1;
-                    p.setInstitute(h);
                     System.out.print("Recovery days for admitted patient ID " + p.id + "- ");
                     int r = in.nextInt();
-                    p.setRecoveryDays(r);
+                    p.getAdmission(h.name,r);
+                    h.availableBeds-=1;
                 }
             }
         }
@@ -188,10 +181,9 @@ class Camp {
             h.admissionOpen = false;
     }
 
-
     //Query 2
     void removeAdmittedAccount() {
-        ArrayList<Patient> toRemove = new ArrayList<Patient>();
+        ArrayList<Patient> toRemove = new ArrayList<>();
         System.out.println("Account ID removed of admitted patients");
         for (Patient p : patientList) {
             if (p.admitted) {
@@ -208,7 +200,7 @@ class Camp {
 
     //Query 3
     void removeClosedAccount() {
-        ArrayList<Healthcare> toRemove = new ArrayList<Healthcare>();
+        ArrayList<Healthcare> toRemove = new ArrayList<>();
         System.out.println("Accounts removed of Institute whose admission is closed");
         for (Healthcare h : healthcareList) {
             if (!h.admissionOpen) {
@@ -270,7 +262,7 @@ class Camp {
     //Query 9
     void displayPatientInInstitute(String s) {
         for (Patient p : patientList) {
-            if (p.Institute != null && p.Institute.name.equals(s)) {
+            if (p.institute != null && p.institute.equals(s)) {
                 p.displayPatientInInstitute();
             }
         }
