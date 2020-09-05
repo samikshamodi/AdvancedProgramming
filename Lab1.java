@@ -317,15 +317,6 @@ public class Lab1 {
                     break;
             }
         }
+        System.out.println("All patients admitted.");
     }
 }
-
-
-
-
-
-
-
-
-
-
