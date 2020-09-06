@@ -86,18 +86,15 @@ class Patient {
         System.out.println(name + ", recovery time is " + recoveryDays + " days");
     }
 
-    boolean getAdmitted()
-    {
-        return admitted;
-    }
-
-    int getId()
-    {
+    int getId() {
         return id;
     }
 
-    Healthcare getInstitute()
-    {
+    boolean getAdmitted() {
+        return admitted;
+    }
+
+    Healthcare getInstitute() {
         return institute;
     }
 
@@ -132,10 +129,14 @@ class Healthcare {
             System.out.println("OPEN");
     }
 
-    String getName()
-    {
+    String getName() {
         return name;
     }
+
+    float getMaxTemp() {
+        return maxTemp;
+    }
+
     int getMinOxy() {
         return minOxy;
     }
@@ -144,25 +145,17 @@ class Healthcare {
         return availableBeds;
     }
 
-    float getMaxTemp() {
-        return maxTemp;
-    }
-
-    boolean getAdmissionOpen()
-    {
+    boolean getAdmissionOpen() {
         return admissionOpen;
     }
 
+    void setAvailableBeds() {
+        availableBeds -= 1;
+    }
 
     void setAdmissionOpen() {
         admissionOpen = false;
     }
-
-    void setAvailableBeds()
-    {
-        availableBeds-=1;
-    }
-
 
 }
 
