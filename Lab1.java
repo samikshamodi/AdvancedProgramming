@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 class Patient {
-    int id;
-    String name;
-    float temp;
-    int olevel;
-    int age;
-    boolean admitted; //false if not admitted. true if admitted
-    String institute; //null if not assigned
-    int recoveryDays;
+    private final int id;
+    private final String name;
+    private final float temp;
+    private final int olevel;
+    private final int age;
+    private boolean admitted; //false if not admitted. true if admitted
+    private Healthcare institute; //null if not assigned
+    private int recoveryDays;
 
     Patient(int i, String n, float t, int o, int a) {
         id = i;
@@ -30,15 +30,36 @@ class Patient {
         olevel = o;
         age = a;
         admitted = false;
-        institute=null;
+        institute = null;
     }
 
     //Query 1
-    void getAdmission(String h,int r)
-    {
-        admitted = true;
-        institute=h;
-        recoveryDays=r;
+    void getAdmissionOxy(Healthcare h) {
+        Scanner in = new Scanner(System.in);
+        if (!admitted) {
+            if (olevel >= h.getMinOxy()) {
+                System.out.print("Recovery days for admitted patient ID " + id + "- ");
+                int r = in.nextInt();
+                h.setAvailableBeds();   //reduce available beds by 1
+                admitted = true;
+                institute = h;
+                recoveryDays = r;
+            }
+        }
+    }
+
+    void getAdmissionTemp(Healthcare h) {
+        Scanner in = new Scanner(System.in);
+        if (!admitted) {
+            if (temp <= h.getMaxTemp()) {
+                System.out.print("Recovery days for admitted patient ID " + id + "- ");
+                int r = in.nextInt();
+                admitted = true;
+                institute = h;
+                recoveryDays = r;
+                h.setAvailableBeds();
+            }
+        }
     }
 
     //Query 7
@@ -50,7 +71,7 @@ class Patient {
         System.out.print("Admission Status - ");
         if (admitted) {
             System.out.println("Admitted");
-            System.out.println("Admitting Institute - " + institute);
+            System.out.println("Admitting Institute - " + institute.getName());
         } else
             System.out.println("Not Admitted");
     }
@@ -65,14 +86,29 @@ class Patient {
         System.out.println(name + ", recovery time is " + recoveryDays + " days");
     }
 
+    boolean getAdmitted()
+    {
+        return admitted;
+    }
+
+    int getId()
+    {
+        return id;
+    }
+
+    Healthcare getInstitute()
+    {
+        return institute;
+    }
+
 }
 
 class Healthcare {
-    String name;
-    float maxTemp;
-    int minOxy;
-    int availableBeds;
-    boolean admissionOpen; //false if closed. true if open
+    private final String name;
+    private final float maxTemp;
+    private final int minOxy;
+    private int availableBeds;
+    private boolean admissionOpen; //false if closed. true if open
 
     Healthcare(String n, float t, int o, int a) {
         name = n;
@@ -95,6 +131,38 @@ class Healthcare {
         else
             System.out.println("OPEN");
     }
+
+    String getName()
+    {
+        return name;
+    }
+    int getMinOxy() {
+        return minOxy;
+    }
+
+    int getAvailableBeds() {
+        return availableBeds;
+    }
+
+    float getMaxTemp() {
+        return maxTemp;
+    }
+
+    boolean getAdmissionOpen()
+    {
+        return admissionOpen;
+    }
+
+
+    void setAdmissionOpen() {
+        admissionOpen = false;
+    }
+
+    void setAvailableBeds()
+    {
+        availableBeds-=1;
+    }
+
 
 }
 
@@ -145,40 +213,25 @@ class Camp {
         //According to oxy level criteria
         for (Patient p : patientList) {
             //if no more beds available then break loop
-            if (h.availableBeds <= 0)
+            if (h.getAvailableBeds() <= 0)
                 break;
-
-            //All the attributes of patient and healthcare are checked here since i don't want
-            //either of them to be accessible by the other.
-            if (!p.admitted) {
-                if (p.olevel >= h.minOxy) {
-                    System.out.print("Recovery days for admitted patient ID " + p.id + "- ");
-                    int r = in.nextInt();
-                    p.getAdmission(h.name,r);
-                    h.availableBeds-=1;
-                }
-            }
+            else
+                p.getAdmissionOxy(h);
         }
 
         //According to temp level criteria
         for (Patient p : patientList) {
             //if no more beds available then break loop
-            if (h.availableBeds <= 0)
+            if (h.getAvailableBeds() <= 0)
                 break;
 
-            if (!p.admitted) {
-                if (p.temp <= h.maxTemp) {
-                    System.out.print("Recovery days for admitted patient ID " + p.id + "- ");
-                    int r = in.nextInt();
-                    p.getAdmission(h.name,r);
-                    h.availableBeds-=1;
-                }
-            }
+            else
+                p.getAdmissionTemp(h);
         }
 
         //if no more beds available, set status to closed
-        if (h.availableBeds <= 0)
-            h.admissionOpen = false;
+        if (h.getAvailableBeds() <= 0)
+            h.setAdmissionOpen();   //set it to false
     }
 
     //Query 2
@@ -186,8 +239,8 @@ class Camp {
         ArrayList<Patient> toRemove = new ArrayList<>();
         System.out.println("Account ID removed of admitted patients");
         for (Patient p : patientList) {
-            if (p.admitted) {
-                System.out.println(p.id);
+            if (p.getAdmitted()) {
+                System.out.println(p.getId());
                 toRemove.add(p);
             }
         }
@@ -203,8 +256,8 @@ class Camp {
         ArrayList<Healthcare> toRemove = new ArrayList<>();
         System.out.println("Accounts removed of Institute whose admission is closed");
         for (Healthcare h : healthcareList) {
-            if (!h.admissionOpen) {
-                System.out.println(h.name);
+            if (!h.getAdmissionOpen()) {
+                System.out.println(h.getName());
                 toRemove.add(h);
             }
         }
@@ -219,7 +272,7 @@ class Camp {
     int unassignedCount() {
         int cnt = 0;
         for (Patient p : patientList) {
-            if (!p.admitted)
+            if (!p.getAdmitted())
                 cnt++;
         }
         return cnt;
@@ -229,7 +282,7 @@ class Camp {
     int displayOpenAccount() {
         int cnt = 0;
         for (Healthcare h : healthcareList) {
-            if (h.admissionOpen)
+            if (h.getAdmissionOpen())
                 cnt++;
         }
         return cnt;
@@ -238,7 +291,7 @@ class Camp {
     //Query 6
     void displayParticularHealthcare(String s) {
         for (Healthcare h : healthcareList) {
-            if (h.name.equals(s)) {
+            if (h.getName().equals(s)) {
                 h.display();
             }
         }
@@ -247,7 +300,7 @@ class Camp {
     //Query 7
     void displayParticularPatient(int id) {
         for (Patient p : patientList) {
-            if (p.id == id) {
+            if (p.getId() == id) {
                 p.displayParticularPatient();
             }
         }
@@ -262,7 +315,7 @@ class Camp {
     //Query 9
     void displayPatientInInstitute(String s) {
         for (Patient p : patientList) {
-            if (p.institute != null && p.institute.equals(s)) {
+            if (p.getInstitute() != null && p.getInstitute().getName().equals(s)) {
                 p.displayPatientInInstitute();
             }
         }
