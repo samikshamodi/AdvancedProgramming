@@ -44,6 +44,7 @@ class Patient {
                 admitted = true;
                 institute = h;
                 recoveryDays = r;
+                h.setPatientRecord(this);
             }
         }
     }
@@ -54,10 +55,11 @@ class Patient {
             if (temp <= h.getMaxTemp()) {
                 System.out.print("Recovery days for admitted patient ID " + id + "- ");
                 int r = in.nextInt();
+                h.setAvailableBeds();
                 admitted = true;
                 institute = h;
                 recoveryDays = r;
-                h.setAvailableBeds();
+                h.setPatientRecord(this);
             }
         }
     }
@@ -94,10 +96,6 @@ class Patient {
         return admitted;
     }
 
-    Healthcare getInstitute() {
-        return institute;
-    }
-
 }
 
 class Healthcare {
@@ -106,6 +104,7 @@ class Healthcare {
     private final int minOxy;
     private int availableBeds;
     private boolean admissionOpen; //false if closed. true if open
+    private ArrayList<Patient> patientRecord;
 
     Healthcare(String n, float t, int o, int a) {
         name = n;
@@ -113,7 +112,13 @@ class Healthcare {
         minOxy = o;
         availableBeds = a;
         admissionOpen = true;
+        patientRecord = new ArrayList<>();
         display();
+    }
+
+    //Query 1
+    void setPatientRecord(Patient p) {
+        patientRecord.add(p);
     }
 
     //Query 6
@@ -127,6 +132,13 @@ class Healthcare {
             System.out.println("CLOSED");
         else
             System.out.println("OPEN");
+    }
+
+    //Query 9
+    void displayPatientInInstitute() {
+        for (Patient p : patientRecord) {
+            p.displayPatientInInstitute();
+        }
     }
 
     String getName() {
@@ -307,9 +319,9 @@ class Camp {
 
     //Query 9
     void displayPatientInInstitute(String s) {
-        for (Patient p : patientList) {
-            if (p.getInstitute() != null && p.getInstitute().getName().equals(s)) {
-                p.displayPatientInInstitute();
+        for (Healthcare h : healthcareList) {
+            if (h.getName().equals(s)) {
+                h.displayPatientInInstitute();
             }
         }
     }
