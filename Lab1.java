@@ -55,7 +55,7 @@ class Patient {
             if (temp <= h.getMaxTemp()) {
                 System.out.print("Recovery days for admitted patient ID " + id + "- ");
                 int r = in.nextInt();
-                h.setAvailableBeds();
+                h.setAvailableBeds(); //reduce available beds by 1
                 admitted = true;
                 institute = h;
                 recoveryDays = r;
@@ -229,7 +229,6 @@ class Camp {
             //if no more beds available then break loop
             if (h.getAvailableBeds() <= 0)
                 break;
-
             else
                 p.getAdmissionTemp(h);
         }
