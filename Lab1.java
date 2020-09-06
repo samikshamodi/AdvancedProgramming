@@ -324,51 +324,59 @@ class Camp {
             }
         }
     }
-}
 
-public class Lab1 {
-
-    public static void main(String[] args) {
+    void runCamp()
+    {
         Scanner in = new Scanner(System.in);
-        Camp camp = new Camp();
-        camp.addPatients();
-
-        while (camp.unassignedCount() > 0) {
+        addPatients();
+        while (unassignedCount() > 0) {
             System.out.print("Input Query: ");
             int query = in.nextInt();
             switch (query) {
                 case 1:
-                    camp.addHealthcareInstitute();
+                    addHealthcareInstitute();
                     break;
                 case 2:
-                    camp.removeAdmittedAccount();
+                    removeAdmittedAccount();
                     break;
                 case 3:
-                    camp.removeClosedAccount();
+                    removeClosedAccount();
                     break;
                 case 4:
-                    System.out.println(camp.unassignedCount() + " patients");
+                    System.out.println(unassignedCount() + " patients");
                     break;
                 case 5:
-                    System.out.println(camp.displayOpenAccount() + " institutes are admitting patients currently");
+                    System.out.println(displayOpenAccount() + " institutes are admitting patients currently");
                     break;
                 case 6:
                     String s = in.next();
-                    camp.displayParticularHealthcare(s);
+                    displayParticularHealthcare(s);
                     break;
                 case 7:
                     int x = in.nextInt();
-                    camp.displayParticularPatient(x);
+                    displayParticularPatient(x);
                     break;
                 case 8:
-                    camp.displayAllPatients();
+                    displayAllPatients();
                     break;
                 case 9:
                     String st = in.next();
-                    camp.displayPatientInInstitute(st);
+                    displayPatientInInstitute(st);
                     break;
             }
         }
         System.out.println("All patients admitted.");
+    }
+}
+
+public class Lab1 {
+    Camp camp;
+    public Lab1(){
+        camp=new Camp();
+        camp.runCamp();
+    }
+
+    public static void main(String[] args) {
+        new Lab1();
     }
 }
