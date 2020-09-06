@@ -34,34 +34,10 @@ class Patient {
     }
 
     //Query 1
-    void getAdmissionOxy(Healthcare h) {
-        Scanner in = new Scanner(System.in);
-        if (!admitted) {
-            if (olevel >= h.getMinOxy()) {
-                System.out.print("Recovery days for admitted patient ID " + id + "- ");
-                int r = in.nextInt();
-                h.setAvailableBeds();   //reduce available beds by 1
-                admitted = true;
-                institute = h;
-                recoveryDays = r;
-                h.setPatientRecord(this);
-            }
-        }
-    }
-
-    void getAdmissionTemp(Healthcare h) {
-        Scanner in = new Scanner(System.in);
-        if (!admitted) {
-            if (temp <= h.getMaxTemp()) {
-                System.out.print("Recovery days for admitted patient ID " + id + "- ");
-                int r = in.nextInt();
-                h.setAvailableBeds(); //reduce available beds by 1
-                admitted = true;
-                institute = h;
-                recoveryDays = r;
-                h.setPatientRecord(this);
-            }
-        }
+    void getAdmission(Healthcare h, int r) {
+        admitted = true;
+        institute = h;
+        recoveryDays = r;
     }
 
     //Query 7
@@ -92,6 +68,15 @@ class Patient {
         return id;
     }
 
+    float getTemp()
+    {
+        return temp;
+    }
+
+    int getOlevel()
+    {
+        return olevel;
+    }
     boolean getAdmitted() {
         return admitted;
     }
@@ -216,21 +201,37 @@ class Camp {
         //first fill all beds with oxy level criteria. If still beds left then fill with body temp criteria
 
         //According to oxy level criteria
+        Scanner in = new Scanner(System.in);
         for (Patient p : patientList) {
-            //if no more beds available then break loop
             if (h.getAvailableBeds() <= 0)
                 break;
-            else
-                p.getAdmissionOxy(h);
+
+            if (!p.getAdmitted()) {
+                if (p.getOlevel() >= h.getMinOxy()) {
+                    System.out.print("Recovery days for admitted patient ID " + p.getId() + "- ");
+                    int r = in.nextInt();
+                    h.setAvailableBeds();   //reduce available beds by 1
+                    p.getAdmission(h, r);
+                    h.setPatientRecord(p);
+                }
+            }
         }
 
-        //According to temp level criteria
+
+        //According to temp criteria
         for (Patient p : patientList) {
-            //if no more beds available then break loop
             if (h.getAvailableBeds() <= 0)
                 break;
-            else
-                p.getAdmissionTemp(h);
+
+            if (!p.getAdmitted()) {
+                if (p.getTemp() <= h.getMaxTemp()) {
+                    System.out.print("Recovery days for admitted patient ID " + p.getId() + "- ");
+                    int r = in.nextInt();
+                    h.setAvailableBeds(); //reduce available beds by 1
+                    p.getAdmission(h, r);
+                    h.setPatientRecord(p);
+                }
+            }
         }
 
         //if no more beds available, set status to closed
@@ -325,8 +326,7 @@ class Camp {
         }
     }
 
-    void runCamp()
-    {
+    void runCamp() {
         Scanner in = new Scanner(System.in);
         addPatients();
         while (unassignedCount() > 0) {
@@ -371,8 +371,9 @@ class Camp {
 
 public class Lab1 {
     Camp camp;
-    public Lab1(){
-        camp=new Camp();
+
+    public Lab1() {
+        camp = new Camp();
         camp.runCamp();
     }
 
