@@ -6,17 +6,17 @@ import java.util.Scanner;
 /*regular
     fast food
     authentic */
-public class Restaurant{
+public class Restaurant implements Login {
     Scanner in = new Scanner(System.in);
     private final String name;
     private final String address;
     int ordersTaken;
     private final String category;
-    int rewardPoints;
-    int companyBalance;     //option 4
-    int deliveryCharges;    //option 4
-    int billDiscount;
-    ArrayList<FoodItem> foodItemList;
+    private int rewardPoints;
+    private int companyBalance;     //option 4
+    private int deliveryCharges;    //option 4
+    private int billDiscount;
+    private ArrayList<FoodItem> foodItemList;
 
     public Restaurant(String name, String address, String category) {
         this.name = name;
@@ -44,6 +44,27 @@ public class Restaurant{
         return details;
     }
 
+    void displayFoodItems()
+    {
+        for(FoodItem f:foodItemList)
+        {
+            System.out.println(f);
+        }
+    }
+
+    FoodItem getFoodItem(int foodid)
+    {
+        for(FoodItem f:foodItemList)
+        {
+            if (f.getId()==foodid)
+            {
+                return f;
+            }
+        }
+        return null;
+    }
+
+
     int getCompanyBalance() {
         return companyBalance;
     }
@@ -67,14 +88,12 @@ public class Restaurant{
         FoodItem f = new FoodItem(Zotato.foodid, fname, fprice, fquantity, fcategory, foffer, this);
         foodItemList.add(f);
         System.out.println(f.display());
-        Zotato.foodid +=1;
+        Zotato.foodid += 1;
     }
 
-    void editItem()
-    {
+    void editItem() {
         System.out.println("Choose item by code");
-        for(FoodItem f:foodItemList)
-        {
+        for (FoodItem f : foodItemList) {
             System.out.println(f);
         }
 
@@ -82,14 +101,12 @@ public class Restaurant{
         int op = in.nextInt();
 
         FoodItem foodItemToBeUpdated = null;
-        for(FoodItem f:foodItemList)
-        {
-            if(f.getId()==op);
+        for (FoodItem f : foodItemList) {
+            if (f.getId() == op)
             {
-                foodItemToBeUpdated=f;
+                foodItemToBeUpdated = f;
                 break;
             }
-
         }
 
 
@@ -99,40 +116,39 @@ public class Restaurant{
                 "3) Quantity\n" +
                 "4) Category\n" +
                 "5) Offer");
-        int oq=in.nextInt();
-        switch (oq)
-        {
+        int oq = in.nextInt();
+        switch (oq) {
             case 1:
                 System.out.print("Enter the new name:");
-                String s1=in.next();
+                String s1 = in.next();
                 assert foodItemToBeUpdated != null;
                 foodItemToBeUpdated.setName(s1);
                 System.out.println(foodItemToBeUpdated);
                 break;
             case 2:
                 System.out.print("Enter the new price:");
-                int s2=in.nextInt();
+                int s2 = in.nextInt();
                 assert foodItemToBeUpdated != null;
                 foodItemToBeUpdated.setPrice(s2);
                 System.out.println(foodItemToBeUpdated);
                 break;
             case 3:
                 System.out.print("Enter the new Quantity");
-                int s3=in.nextInt();
+                int s3 = in.nextInt();
                 assert foodItemToBeUpdated != null;
                 foodItemToBeUpdated.setQuantity(s3);
                 System.out.println(foodItemToBeUpdated);
                 break;
             case 4:
                 System.out.print("Enter the new Category:");
-                String s4=in.next();
+                String s4 = in.next();
                 assert foodItemToBeUpdated != null;
                 foodItemToBeUpdated.setName(s4);
                 System.out.println(foodItemToBeUpdated);
                 break;
             case 5:
                 System.out.print("Enter the new Offer:");
-                int s5=in.nextInt();
+                int s5 = in.nextInt();
                 assert foodItemToBeUpdated != null;
                 foodItemToBeUpdated.setDiscount(s5);
                 System.out.println(foodItemToBeUpdated);
@@ -141,7 +157,9 @@ public class Restaurant{
 
     }
 
-    void restaurantRun() {
+
+    @Override
+    public void login() {
         while (true) {
             System.out.println("\nWelcome " + name + "\n" +
                     "1) Add item\n" +
@@ -178,8 +196,6 @@ public class Restaurant{
         }
 
     }
-
-
 }
 
 

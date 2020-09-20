@@ -37,6 +37,12 @@ public class FoodItem {
         return id;
     }
 
+    public int getQuantity()
+    {
+        return quantity;
+    }
+
+
     public void setName(String s)
     {
         name=s;
@@ -61,6 +67,12 @@ public class FoodItem {
     {
         discount=d;
     }
+
+    public void reduceQuantity(int q)
+    {
+        quantity-=q;
+    }
+
 
 
 }
