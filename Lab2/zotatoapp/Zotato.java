@@ -13,8 +13,6 @@ public class Zotato {
 
 
     public Zotato() {
-        user=new User();
-
         restaurantList = new ArrayList<>();
         customerList = new ArrayList<>();
 
@@ -29,6 +27,8 @@ public class Zotato {
         restaurantList.add(new AuthenticRestaurant("The Chinese", "Timarpur", "(Authentic)"));
         restaurantList.add(new FastFoodRestaurant("Wang's", "Wazirpur", "(Fast Food)"));
         restaurantList.add(new Restaurant("Paradise", "Panipur", ""));
+
+        user=new User(restaurantList,customerList);
     }
 
     void zotatoRun() {
@@ -45,13 +45,13 @@ public class Zotato {
 
             switch (op) {
                 case 1:
-                    user.listRestaurant(restaurantList);
+                    user.listRestaurant();
                     break;
                 case 2:
-                    user.listCustomer(customerList);
+                    user.listCustomer();
                     break;
                 case 3:
-                    user.checkUserDetails(restaurantList,customerList);
+                    user.checkUserDetails();
                     break;
                 case 4:
                     int cb=0;

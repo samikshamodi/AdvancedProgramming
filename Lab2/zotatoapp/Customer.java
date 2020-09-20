@@ -9,6 +9,7 @@ public class Customer {
     int wallet;
     private String category;
     int rewardPoints;
+    private Cart cart;
 
     public Customer(String name, String address, String category) {
         this.name=name;
@@ -16,6 +17,7 @@ public class Customer {
         this.wallet=1000;
         this.category=category;
         this.rewardPoints=0;
+        cart=null;
     }
 
     String getName()
@@ -33,5 +35,15 @@ public class Customer {
         String details="";
         details+=name+" "+category+" "+address+" "+" "+wallet;
         return details;
+    }
+
+    void setCart()
+    {
+        cart=new Cart();
+    }
+
+    void shop()
+    {
+
     }
 }

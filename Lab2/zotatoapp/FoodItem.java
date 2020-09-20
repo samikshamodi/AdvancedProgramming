@@ -32,5 +32,35 @@ public class FoodItem {
         return details;
     }
 
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setName(String s)
+    {
+        name=s;
+    }
+
+    public void setPrice(int p)
+    {
+        price=p;
+    }
+
+    public void setQuantity(int q)
+    {
+        quantity=q;
+    }
+
+    public void setCategory(String s)
+    {
+        category=s;
+    }
+
+    public void setDiscount(int d)
+    {
+        discount=d;
+    }
+
 
 }
