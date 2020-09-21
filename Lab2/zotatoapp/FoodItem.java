@@ -5,9 +5,9 @@ public class FoodItem {
     private String name;
     private int price;
     private int quantity;
-    String category;
+    private String category;
     private int discount;
-    Restaurant restaurantName;
+    private Restaurant restaurantName;
 
     public FoodItem(int id, String name, int price, int quantity, String category,int discount,Restaurant restaurantName)
     {
@@ -74,5 +74,23 @@ public class FoodItem {
     }
 
 
+    public int getDiscount() {
+        return discount;
+    }
 
+    public Restaurant getRestaurantName() {
+        return  restaurantName;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

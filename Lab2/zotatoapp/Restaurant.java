@@ -73,6 +73,11 @@ public class Restaurant implements Login {
         return deliveryCharges;
     }
 
+    int getBillDiscount()
+    {
+        return  billDiscount;
+    }
+
     void addItem() {
         System.out.println("\nEnter food item details");
         System.out.print("Food name:");
@@ -108,7 +113,6 @@ public class Restaurant implements Login {
                 break;
             }
         }
-
 
         System.out.println("\nChoose an attribute to edit: " + "\n" +
                 "1) Name\n" +
