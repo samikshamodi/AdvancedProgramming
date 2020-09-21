@@ -42,7 +42,7 @@ public class Cart {
     public double calculateFoodItemOffer() {
         double d1 = 0;
         for (FoodItem f : itemList) {
-            d1 += ((f.getDiscount() * f.getPrice() * f.getQuantity()) / 100);
+            d1 = ((f.getDiscount() * f.getPrice() * f.getQuantity()) / 100.0);
         }
         return d1;
 

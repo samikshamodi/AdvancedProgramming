@@ -7,11 +7,6 @@ public class EliteCustomer extends Customer {
         super(name, address, category, restaurantList);
     }
 
-    @Override
-    void  calculateRewardPointCustomer(double bill)
-    {
-
-    }
 
     @Override
     void checkoutCart() {
@@ -65,5 +60,11 @@ public class EliteCustomer extends Customer {
         bill += 0;
         System.out.println("Total order value - " + bill);
         super.proceedToCheckout(bill);
+    }
+
+    @Override
+    void updateDeliveryChargesRestaurant(Restaurant r)
+    {
+        r.setDeliveryCharges(0);
     }
 }

@@ -93,7 +93,7 @@ public class Zotato {
                     }
                     break;
                 case 4:
-                    int cb = 0;
+                    double cb = 0;
                     int dc = 0;
                     for (Restaurant r : restaurantList) {
                         cb += r.getCompanyBalance();
@@ -101,7 +101,6 @@ public class Zotato {
                     }
                     System.out.println("Total Company Balance - INR" + " " + cb);
                     System.out.println("Total Delivery Charges Collected - INR" + " " + dc);
-
                     break;
                 case 5:
                     System.out.println("Exiting App.\nGoodbye");

@@ -12,8 +12,8 @@ public class Restaurant implements Login {
     private final String address;
     int ordersTaken;
     private final String category;
-    private int rewardPoints;
-    private int companyBalance;     //option 4
+    protected int rewardPoints;
+    private double companyBalance;     //option 4
     private int deliveryCharges;    //option 4
     private int billDiscount;
     private ArrayList<FoodItem> foodItemList;
@@ -44,20 +44,15 @@ public class Restaurant implements Login {
         return details;
     }
 
-    void displayFoodItems()
-    {
-        for(FoodItem f:foodItemList)
-        {
+    void displayFoodItems() {
+        for (FoodItem f : foodItemList) {
             System.out.println(f);
         }
     }
 
-    FoodItem getFoodItem(int foodid)
-    {
-        for(FoodItem f:foodItemList)
-        {
-            if (f.getId()==foodid)
-            {
+    FoodItem getFoodItem(int foodid) {
+        for (FoodItem f : foodItemList) {
+            if (f.getId() == foodid) {
                 return f;
             }
         }
@@ -65,7 +60,7 @@ public class Restaurant implements Login {
     }
 
 
-    int getCompanyBalance() {
+    double getCompanyBalance() {
         return companyBalance;
     }
 
@@ -73,9 +68,8 @@ public class Restaurant implements Login {
         return deliveryCharges;
     }
 
-    int getBillDiscount()
-    {
-        return  billDiscount;
+    int getBillDiscount() {
+        return billDiscount;
     }
 
     void addItem() {
@@ -107,8 +101,7 @@ public class Restaurant implements Login {
 
         FoodItem foodItemToBeUpdated = null;
         for (FoodItem f : foodItemList) {
-            if (f.getId() == op)
-            {
+            if (f.getId() == op) {
                 foodItemToBeUpdated = f;
                 break;
             }
@@ -199,6 +192,21 @@ public class Restaurant implements Login {
             }
         }
 
+    }
+
+
+    public void calculateZotatoIncome(double bill) {
+        companyBalance += (0.01 * bill);
+    }
+
+    public int calculateRewardPointRestaurant(double bill) {
+        int p=((int) (bill / 200)) * 5;
+        rewardPoints += p;
+        return p;
+    }
+
+    public void setDeliveryCharges(int i) {
+        deliveryCharges+=i;
     }
 }
 

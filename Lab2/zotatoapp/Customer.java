@@ -14,8 +14,8 @@ public class Customer implements Login {
     private String category;
     int rewardPoints;
     protected Cart myCart;
-    ArrayList<Restaurant> restaurantList;
-    ArrayList<Cart> recentOrders;
+    private ArrayList<Restaurant> restaurantList;
+    private ArrayList<Cart> recentOrders;
 
 
     public Customer(String name, String address, String category, ArrayList<Restaurant> restaurantList) {
@@ -50,24 +50,23 @@ public class Customer implements Login {
         checkoutCart();
     }
 
-    void  calculateRewardPointCustomer(double bill)
+     void updateCustomerWallet(double bill)
     {
-
+        if(bill>rewardPoints)
+        {
+            bill-=rewardPoints;
+            rewardPoints=0;
+            wallet-=bill;
+        }
+        else if(rewardPoints>bill)
+        {
+            rewardPoints-=bill;
+        }
     }
 
-  /*  void calculateRewardPointRestaurant(double bill)
+    void updateDeliveryChargesRestaurant(Restaurant r)
     {
-        //TODO in restaurant
-    }*/
-
-    void calculateZotatoIncome(double bill)
-    {
-
-    }
-
-    void updateCustomerWallet(double bill)
-    {
-
+        r.setDeliveryCharges(40);
     }
 
     void proceedToCheckout(double bill) {
@@ -77,7 +76,7 @@ public class Customer implements Login {
 
         if (op == 1) {
             if (bill == 0) {
-                System.out.println(myCart.getCartSize() + " items successfully bought for INR " + 0);
+                System.out.println(myCart.getCartSize() + " items successfully bought for INR " + bill);
                 return;
             }
 
@@ -87,24 +86,24 @@ public class Customer implements Login {
             else
             {
                 System.out.println(myCart.getCartSize() + " items successfully bought for INR " + bill);
-                calculateRewardPointCustomer(bill);
-                calculateRewardPointRestaurant(bill);
-                calculateZotatoIncome(bill);    //company balance per restaurant
                 updateCustomerWallet(bill);
-
+                rewardPoints+= myCart.getRestaurant().calculateRewardPointRestaurant(bill); //update reward points of customer
+                myCart.getRestaurant().calculateZotatoIncome(bill);    //company balance per restaurant
+                updateDeliveryChargesRestaurant(myCart.getRestaurant());
                 recentOrders.add(myCart);       //add the cart to recent order
                 myCart=new Cart();              //reset cart as new
             }
 
         }
 
-        //TODO
+        //TODO handle delivery charge
         //option to delete if insuffucuent
         //calculate reward points
         //update in ustomerwaller (first in reward points then from wallet)
         //update in restuaurant TODO orders take and reward point
         //calucalte transaction fee
         //set a new cart
+        //updtaed delivery charges collected add attribute in customer instead of restaurant
     }
 
     void checkoutCart() {
@@ -113,6 +112,7 @@ public class Customer implements Login {
 
         if (bill == 0) {
             System.out.println("Total order value - INR 0");
+            //pass delivery charges in proceed to checkout. simple.
             proceedToCheckout(bill);
             return;
         }
@@ -129,6 +129,7 @@ public class Customer implements Login {
 
         //overall bill fast food restaurant disocunt
         Restaurant r = myCart.getRestaurant();
+        //TODO apply inheritence here. add functions in the restaurant classes.
 
         if (r.getCategory() == ("Fast Food")) {
             double d2 = (bill * r.getBillDiscount()) / 100;
@@ -192,7 +193,7 @@ public class Customer implements Login {
                         if (selectedFoodItem.getQuantity() == 0) {
                             System.out.println("Restaurant ran out of this item");
                         } else if (q > selectedFoodItem.getQuantity()) {
-                            System.out.println("The restaurant only has only " + selectedFoodItem.getQuantity() + " quantity of this item");
+                            System.out.println("Order not accepted. The restaurant only has only " + selectedFoodItem.getQuantity() + " quantity of this item");
                         } else {
                             //TODO add items to cart;
                             //create a new object of selected food item with the bought quantity and add it to cart
@@ -211,8 +212,16 @@ public class Customer implements Login {
                     checkoutCart();
                     break;
                 case 3:
+                    System.out.println("Reward won - "+rewardPoints);
                     break;
                 case 4:
+                    int k=1;
+                    //TODO for last 10 ordres
+                    for(Cart o:recentOrders)
+                    {
+                        System.out.println("Order "+k++);
+                        o.displayCart();
+                    }
                     break;
                 case 5:
                     return;
