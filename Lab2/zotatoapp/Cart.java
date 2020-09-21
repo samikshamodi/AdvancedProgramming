@@ -71,4 +71,12 @@ public class Cart {
         int op=in.nextInt();
         itemList.remove(op-1);  //op-1 since AL index starts from 0
     }
+
+    public void displayLastOrder(int dc)
+    {
+        for (FoodItem f : itemList)
+        {
+            f.displayLastOrder(dc);
+        }
+    }
 }

@@ -15,7 +15,7 @@ public class Restaurant implements Login {
     protected int rewardPoints;
     private double companyBalance;     //option 4
     private int deliveryCharges;    //option 4
-    private int billDiscount;
+    protected int billDiscount;
     private ArrayList<FoodItem> foodItemList;
 
     public Restaurant(String name, String address, String category) {
@@ -66,10 +66,6 @@ public class Restaurant implements Login {
 
     int getDeliveryCharges() {
         return deliveryCharges;
-    }
-
-    int getBillDiscount() {
-        return billDiscount;
     }
 
     void addItem() {
@@ -200,13 +196,17 @@ public class Restaurant implements Login {
     }
 
     public int calculateRewardPointRestaurant(double bill) {
-        int p=((int) (bill / 200)) * 5;
+        int p = ((int) (bill / 200)) * 5;
         rewardPoints += p;
         return p;
     }
 
     public void setDeliveryCharges(int i) {
-        deliveryCharges+=i;
+        deliveryCharges += i;
+    }
+
+    public double applyRestaurantDiscount(double bill) {
+        return 0;
     }
 }
 

@@ -93,4 +93,9 @@ public class FoodItem {
     public String getName() {
         return name;
     }
+
+    public void displayLastOrder(int dc)
+    {
+        System.out.println("Bought item: "+name+",quantity: "+quantity+",for Rs "+price+" from Restaurant "+restaurantName.getName()+" and Delivery Charge: "+dc);
+    }
 }

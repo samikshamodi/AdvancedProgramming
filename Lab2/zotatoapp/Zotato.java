@@ -21,11 +21,11 @@ public class Zotato {
         restaurantList.add(new FastFoodRestaurant("Wang's", "Wazirpur", "(Fast Food)"));
         restaurantList.add(new Restaurant("Paradise", "Panipur", ""));
 
-        customerList.add(new EliteCustomer("Ram", "Raipur", "(Elite)",restaurantList));
-        customerList.add(new EliteCustomer("Sam", "Shahpur", "(Elite)",restaurantList));
-        customerList.add(new SpecialCustomer("Tim", "Timarpur", "(Special)",restaurantList));
-        customerList.add(new Customer("Kim", "Kanpur", "",restaurantList));
-        customerList.add(new Customer("Jim", "Jodhpur", "",restaurantList));
+        customerList.add(new EliteCustomer("Ram", "Raipur", "(Elite)",restaurantList,0));
+        customerList.add(new EliteCustomer("Sam", "Shahpur", "(Elite)",restaurantList,0));
+        customerList.add(new SpecialCustomer("Tim", "Timarpur", "(Special)",restaurantList,20));
+        customerList.add(new Customer("Kim", "Kanpur", "",restaurantList,40));
+        customerList.add(new Customer("Jim", "Jodhpur", "",restaurantList,40));
 
     }
 

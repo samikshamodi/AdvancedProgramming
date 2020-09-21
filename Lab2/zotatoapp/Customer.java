@@ -16,9 +16,10 @@ public class Customer implements Login {
     protected Cart myCart;
     private ArrayList<Restaurant> restaurantList;
     private ArrayList<Cart> recentOrders;
+    private int deliveryCost;
 
 
-    public Customer(String name, String address, String category, ArrayList<Restaurant> restaurantList) {
+    public Customer(String name, String address, String category, ArrayList<Restaurant> restaurantList,int deliveryCost) {
         this.name = name;
         this.address = address;
         this.wallet = 1000;
@@ -27,7 +28,7 @@ public class Customer implements Login {
         myCart = null;
         this.restaurantList = restaurantList;
         this.recentOrders = new ArrayList<>();
-
+        this.deliveryCost=deliveryCost;
     }
 
     String getName() {
@@ -96,18 +97,20 @@ public class Customer implements Login {
 
         }
 
-        //TODO handle delivery charge
-        //option to delete if insuffucuent
+        //TODO
+        //handle delivery charge
+        //option to delete if insufficient
         //calculate reward points
-        //update in ustomerwaller (first in reward points then from wallet)
-        //update in restuaurant TODO orders take and reward point
-        //calucalte transaction fee
+        //update in customerwallet (first in reward points then from wallet)
+        //update in restuaurant
+        //calculate transaction fee
         //set a new cart
         //updtaed delivery charges collected add attribute in customer instead of restaurant
     }
 
+
     void checkoutCart() {
-        System.out.println("Delivery Charge - " + 40);
+        System.out.println("Delivery Charge - " + deliveryCost );
         double bill = myCart.calculateCartValue();
 
         if (bill == 0) {
@@ -123,37 +126,23 @@ public class Customer implements Login {
         double d1 = myCart.calculateFoodItemOffer();
         bill -= d1;
 
-
         //overall restaurant bill discounts
-        //overall bill regular restaurant discount=0
-
-        //overall bill fast food restaurant disocunt
-        Restaurant r = myCart.getRestaurant();
-        //TODO apply inheritence here. add functions in the restaurant classes.
-
-        if (r.getCategory() == ("Fast Food")) {
-            double d2 = (bill * r.getBillDiscount()) / 100;
-            bill -= d2;
-        }
-
-        //overall bill authentic restaurant discount  //if after that still bill value is greater 100 then rs 50 off
-        if (r.getCategory() == "(Authentic)") {
-            double d3 = (bill * r.getBillDiscount()) / 100;
-            bill -= d3;
-
-            if (bill > 100) {
-                bill -= 50;
-            }
-        }
+        double d2=myCart.getRestaurant().applyRestaurantDiscount(bill);
+        bill-=d2;
 
         //customer discount
-        //elite customer discount=0;
-        //special customer discount =0;
+        double d3=applyCustomerDiscount(bill);
+        bill-=d3;
 
-        //add delivery amount
-        bill += 40;
+        //add delivery Cost
+        bill+=deliveryCost;
+
         System.out.println("Total order value - " + bill);
         proceedToCheckout(bill);
+    }
+
+    double applyCustomerDiscount(double bill) {
+        return 0;
     }
 
 
@@ -190,6 +179,11 @@ public class Customer implements Login {
                         FoodItem selectedFoodItem = selectedRestaurant.getFoodItem(ow);
                         System.out.print("Enter item quantity - ");
                         int q = in.nextInt();
+                        //Incase you selected a restaurant which has no items
+                        if (selectedFoodItem==null)
+                        {
+                            break;
+                        }
                         if (selectedFoodItem.getQuantity() == 0) {
                             System.out.println("Restaurant ran out of this item");
                         } else if (q > selectedFoodItem.getQuantity()) {
@@ -215,13 +209,18 @@ public class Customer implements Login {
                     System.out.println("Reward won - "+rewardPoints);
                     break;
                 case 4:
-                    int k=1;
-                    //TODO for last 10 ordres
-                    for(Cart o:recentOrders)
-                    {
-                        System.out.println("Order "+k++);
-                        o.displayCart();
+                    int n=Math.min(recentOrders.size(),10);
+                    for (int j = recentOrders.size()-1,k=n-1; k>=0  ; j--,k--) {
+                        System.out.println("Order");
+                        Cart o=recentOrders.get(j);
+                        o.displayLastOrder(deliveryCost);
+
                     }
+                   /* for(Cart o:recentOrders)
+                    {
+                        System.out.println("Order");
+                        o.displayLastOrder(deliveryCost);
+                    }*/
                     break;
                 case 5:
                     return;
