@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Cart {
     Scanner in = new Scanner(System.in);
-    private ArrayList<FoodItem> itemList;
+    private final ArrayList<FoodItem> itemList;
 
 
     public Cart() {

@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 public class Zotato {
     Scanner in = new Scanner(System.in);
-    private ArrayList<Restaurant> restaurantList;
-    private ArrayList<Customer> customerList;
+    private final ArrayList<Restaurant> restaurantList;
+    private final ArrayList<Customer> customerList;
     public static int foodid = 1;
 
 

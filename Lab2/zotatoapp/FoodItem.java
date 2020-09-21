@@ -1,13 +1,13 @@
 package zotatoapp;
 
 public class FoodItem {
-    private int id;
+    private final int id;
     private String name;
     private int price;
     private int quantity;
-    private String category;
+    private final String category;
     private int discount;
-    private Restaurant restaurantName;
+    private final Restaurant restaurantName;
 
     public FoodItem(int id, String name, int price, int quantity, String category,int discount,Restaurant restaurantName)
     {
@@ -56,11 +56,6 @@ public class FoodItem {
     public void setQuantity(int q)
     {
         quantity=q;
-    }
-
-    public void setCategory(String s)
-    {
-        category=s;
     }
 
     public void setDiscount(int d)

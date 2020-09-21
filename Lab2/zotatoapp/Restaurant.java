@@ -10,13 +10,13 @@ public class Restaurant implements Login {
     Scanner in = new Scanner(System.in);
     private final String name;
     private final String address;
-    int ordersTaken;
+    private int ordersTaken;
     private final String category;
     protected int rewardPoints;
     private double companyBalance;     //option 4
     private int deliveryCharges;    //option 4
     protected int billDiscount;
-    private ArrayList<FoodItem> foodItemList;
+    private final ArrayList<FoodItem> foodItemList;
 
     public Restaurant(String name, String address, String category) {
         this.name = name;
@@ -176,7 +176,7 @@ public class Restaurant implements Login {
                 case 4:
                     System.out.print("Offer on bill value: ");
                     /* regular restaurant*/
-                    if (category == "") {
+                    if (category.equals("")) {
                         System.out.println(0);
                     } else {
                         int bd = in.nextInt();
@@ -196,7 +196,7 @@ public class Restaurant implements Login {
     }
 
     public int calculateRewardPointRestaurant(double bill) {
-        int p = ((int) (bill / 200)) * 5;
+        int p = ((int) (bill /100)) * 5;
         rewardPoints += p;
         return p;
     }
@@ -207,6 +207,10 @@ public class Restaurant implements Login {
 
     public double applyRestaurantDiscount(double bill) {
         return 0;
+    }
+
+    public void updateOrdersTaken() {
+        ordersTaken+=1;
     }
 }
 

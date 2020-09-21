@@ -8,15 +8,15 @@ import java.util.Scanner;
     special*/
 public class Customer implements Login {
     Scanner in = new Scanner(System.in);
-    private String name;
-    private String address;
-    int wallet;
-    private String category;
-    int rewardPoints;
+    private final String name;
+    private final String address;
+    private double wallet;
+    private final String category;
+    private int rewardPoints;
     protected Cart myCart;
-    private ArrayList<Restaurant> restaurantList;
-    private ArrayList<Cart> recentOrders;
-    private int deliveryCost;
+    private final ArrayList<Restaurant> restaurantList;
+    private final ArrayList<Cart> recentOrders;
+    private final int deliveryCost;
 
 
     public Customer(String name, String address, String category, ArrayList<Restaurant> restaurantList,int deliveryCost) {
@@ -91,6 +91,7 @@ public class Customer implements Login {
                 rewardPoints+= myCart.getRestaurant().calculateRewardPointRestaurant(bill); //update reward points of customer
                 myCart.getRestaurant().calculateZotatoIncome(bill);    //company balance per restaurant
                 updateDeliveryChargesRestaurant(myCart.getRestaurant());
+                myCart.getRestaurant().updateOrdersTaken();
                 recentOrders.add(myCart);       //add the cart to recent order
                 myCart=new Cart();              //reset cart as new
             }
@@ -206,7 +207,7 @@ public class Customer implements Login {
                     checkoutCart();
                     break;
                 case 3:
-                    System.out.println("Reward won - "+rewardPoints);
+                    System.out.println("Total Rewards - "+rewardPoints);
                     break;
                 case 4:
                     int n=Math.min(recentOrders.size(),10);
