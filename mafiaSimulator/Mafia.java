@@ -19,9 +19,10 @@ public class Mafia extends Player {
             //if user is dead, then return random
             Collections.shuffle(playerList);
             for (Player i : playerList) {
-                if (!(mafiaList.contains(i)))
+                if (!(mafiaList.contains(i))) {
                     System.out.println("Mafias have chosen their target");
-                return i;
+                    return i;
+                }
             }
         }
 

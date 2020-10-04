@@ -216,7 +216,7 @@ public class Main {
             }
             Collections.shuffle(playerList);    //random vote
             //votingTarget = playerList.get(0);//TODO REMOVE abhi
-            System.out.println("----voting out " + votingTarget + "-----");//TODO remove
+            System.out.println(votingTarget+" has been voted out.");
             votingTarget.kill();
             playerList.remove(votingTarget);
 
