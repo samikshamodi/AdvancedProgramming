@@ -14,9 +14,9 @@ public abstract class Player {
         this.status="alive";
     }
 
-    public abstract Player action1(ArrayList<Player> playerList,ArrayList<Mafia>mafiaList);
-    public abstract Player action2(ArrayList<Player> playerList,ArrayList<Detective>detectiveList);
-    public abstract Player action3(ArrayList<Player> playerList);
+    public abstract Player action1(ArrayList<Player> playerList,ArrayList<Mafia>mafiaList,Player user);
+    public abstract Player action2(ArrayList<Player> playerList,ArrayList<Detective>detectiveList,Player user, int no_detective_alive);
+    public abstract Player action3(ArrayList<Player> playerList,Player user,int no_healer_alive);
 
     protected int getNumber() {
         return number;

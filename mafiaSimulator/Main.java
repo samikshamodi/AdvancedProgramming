@@ -152,15 +152,13 @@ public class Main {
             System.out.println("are alive.");
 
             //TODO add check, do an action only if mafia detective and healer are alive
-            if (no_mafia_alive() > 0)
-                mafiaTarget = user.action1(playerList, mafiaList);
-            if (no_detective_alive() > 0)
-                detectiveTarget = user.action2(playerList, detectiveList);
-            if (no_healer_alive() > 0)
-                healerTarget = user.action3(playerList);
+            mafiaTarget = user.action1(playerList, mafiaList, user);
+            detectiveTarget = user.action2(playerList, detectiveList, user,no_detective_alive());
+            healerTarget = user.action3(playerList, user,no_healer_alive());
 
             System.out.println("----- " + mafiaTarget + detectiveTarget + healerTarget + "-----");    //TODO remove
 
+            //assert mafiaTarget!=null;
             //did someone die. reduce hp of mafia and target then print
             //heal only if healers are alive
             int X = mafiaTarget.getHp();
@@ -178,7 +176,7 @@ public class Main {
                 System.out.println(mafiaTarget + " has died.");
             }
             //after killing check if game has ended
-            if(endOfGame())
+            if (endOfGame())
                 break;
 
 
@@ -190,40 +188,44 @@ public class Main {
                 continue;
             }
 
-            //else if detective did not test a mafia then voting and we remove the person. KILL HIMMM
-            done = false;
-            while (!done) {
-                try {
-                    Scanner in = new Scanner(System.in);
-                    System.out.print("Select a person to vote out: ");
-                    int q = in.nextInt();
-                    for (Player i : playerList) {
-                        if (i.getNumber() == q) {
-                            done = true;
-                            votingTarget = i;
-                            break;
-                        }
-                    }
-                    if (!done) {
-                        System.out.println("Invalid selection. Choose again.");
-                    }
+            votingTarget = playerList.get(0);//TODO REMOVE abhi !!!!!!!!!!!!!!!!!!
 
-                } catch (InputMismatchException inp) {
-                    System.out.println("Wrong input. Try again.");
+            //else if detective did not test a mafia then voting and we remove the person. KILL HIMMM
+            if (user.getStatus() == "alive") {
+                done = false;
+                while (!done) {
+                    try {
+                        Scanner in = new Scanner(System.in);
+                        System.out.print("Select a person to vote out: ");
+                        int q = in.nextInt();
+                        for (Player i : playerList) {
+                            if (i.getNumber() == q) {
+                                done = true;
+                                votingTarget = i;
+                                break;
+                            }
+                        }
+                        if (!done) {
+                            System.out.println("Invalid selection. Choose again.");
+                        }
+
+                    } catch (InputMismatchException inp) {
+                        System.out.println("Wrong input. Try again.");
+                    }
                 }
             }
-          //  Collections.shuffle(playerList);    //random vote
-           // System.out.println("----voting out "+votingTarget+"-----");//TODO remove
-           // votingTarget = playerList.get(0);
+            Collections.shuffle(playerList);    //random vote
+            //votingTarget = playerList.get(0);//TODO REMOVE abhi
+            System.out.println("----voting out " + votingTarget + "-----");//TODO remove
             votingTarget.kill();
             playerList.remove(votingTarget);
 
 
-            //if the user is no longer alive, then end the game; //LOGICAL ERROR. INPUT BELOW
+            /*//if the user is no longer alive, then end the game; //LOGICAL ERROR. INPUT BELOW
             if (user.getStatus()=="dead") {
                 System.out.println("The Mafias have lost");
                 break;
-            }
+            }*/
         }
 
         //TODO remove
@@ -311,7 +313,7 @@ public class Main {
                 ccnt++;
             }
         }
-        System.out.println("---mcnt "+mcnt+"        "+(dcnt+hcnt+ccnt)+"------");
+        System.out.println("---mcnt " + mcnt + "        " + (dcnt + hcnt + ccnt) + "------");
         //if end of game
         if (mcnt == 0) {
             System.out.println("The Mafias have lost.");
