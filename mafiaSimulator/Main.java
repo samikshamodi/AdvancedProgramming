@@ -177,6 +177,9 @@ public class Main {
                 playerList.remove(mafiaTarget);
                 System.out.println(mafiaTarget + " has died.");
             }
+            //after killing check if game has ended
+            if(endOfGame())
+                break;
 
 
             //detective tested and it was mafia
@@ -209,20 +212,26 @@ public class Main {
                     System.out.println("Wrong input. Try again.");
                 }
             }
-            Collections.shuffle(playerList);    //random vote
-            System.out.println("----voting out "+votingTarget+"-----");//TODO remove
-            votingTarget = playerList.get(0);
+          //  Collections.shuffle(playerList);    //random vote
+           // System.out.println("----voting out "+votingTarget+"-----");//TODO remove
+           // votingTarget = playerList.get(0);
             votingTarget.kill();
             playerList.remove(votingTarget);
 
 
             //if the user is no longer alive, then end the game; //LOGICAL ERROR. INPUT BELOW
-            if (!playerList.contains(user)) {
+            if (user.getStatus()=="dead") {
                 System.out.println("The Mafias have lost");
                 break;
             }
         }
 
+        //TODO remove
+        System.out.print(playerList.size() + " players are remaining: ");
+        for (Player i : playerList) {
+            System.out.print(i + ", ");
+        }
+        System.out.println("are alive.");
 
         //Game has ended
         System.out.println("\n" + roles);
@@ -302,12 +311,12 @@ public class Main {
                 ccnt++;
             }
         }
-
+        System.out.println("---mcnt "+mcnt+"        "+(dcnt+hcnt+ccnt)+"------");
         //if end of game
         if (mcnt == 0) {
             System.out.println("The Mafias have lost.");
             return true;
-        } else if (mcnt == dcnt + hcnt + ccnt) {
+        } else if (mcnt == (dcnt + hcnt + ccnt)) {
             System.out.println("The Mafias have won.");
             return true;
         } else {
@@ -317,70 +326,3 @@ public class Main {
 
 }
 
-
-/*
-    Welcome to Mafia
-        Enter number of Players:10
-        Choose a Character
-        1)Mafia
-        2)Detective
-        3)Healer
-        4)Commoner
-        5)Assign randomly
-        Option:1
-        2 2 1 5
-        4 2 1 10 8 7 5 6 9 3
-        You are Player 4
-        You are a mafia. Other mafias are: Player 2,
-
-        Round 1
-        10 players are remaining: Player 4, Player 2, Player 1, Player 10, Player 8, Player 7, Player 5, Player 6, Player 9, Player 3, are alive.
-        Choose a target: 4
-        Cannot kill another mafia.
-        Invalid selection. Choose again.
-        Choose a target: 2
-        Cannot kill another mafia.
-        Invalid selection. Choose again.
-        Choose a target: 1
-        Detectives have chosen a player to test
-        Healers have chosen someone to heal
-        ----- Player 1Player 5Player 10-----
-        Player 1 has died.
-        Select a person to vote out: 564
-        Invalid selection. Choose again.
-        Select a person to vote out: jfdk
-        Wrong input. Try again.
-        Select a person to vote out: 7
-        ----voting out Player 7-----
-
-        Round 2
-        8 players are remaining: Player 2, Player 8, Player 9, Player 4, Player 10, Player 3, Player 7, Player 5, are alive.
-        Choose a target: 2
-        Cannot kill another mafia.
-        Invalid selection. Choose again.
-        Choose a target: 5
-        Detectives have chosen a player to test
-        Healers have chosen someone to heal
-        ----- Player 5Player 2Player 2-----
-        Player 5 has died.
-        Player 2 has been voted out
-
-        Round 3
-        6 players are remaining: Player 9, Player 4, Player 10, Player 3, Player 7, Player 8, are alive.
-        Choose a target: 10
-        Detectives have chosen a player to test
-        Healers have chosen someone to heal
-        ----- Player 10Player 8Player 10-----
-        No one has died
-        Select a person to vote out: 8
-        ----voting out Player 8-----
-        The Mafias have lost
-
-        Player 4, Player 2, were mafia.
-        Player 1, Player 10, were detective.
-        Player 8, were healer.
-        Player 7, Player 5, Player 6, Player 9, Player 3, were commoner.
-
-
-        Process finished with exit code 0
-*/
