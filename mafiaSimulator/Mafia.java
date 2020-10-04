@@ -10,69 +10,56 @@ public class Mafia extends Player {
         super(number, 2500);
     }
 
-    @Override
-    public boolean equals (Object o1)
-    {
-        if(o1!=null && getClass()==o1.getClass())
-            return true;    //returns true if Mafia
-
-        return false;
-    }
 
     @Override
-    public void playAs(ArrayList<Player> playerList) {
+    public Player action1(ArrayList<Player> playerList,ArrayList<Mafia>mafiaList) {
         //System.out.println("mafia playing");
-        boolean done =false;
-        Player chosenTarget=null;
-        while (!done) {
+        while (true) {
             try {
                 Scanner in = new Scanner(System.in);
                 System.out.print("Choose a target: ");
                 int q = in.nextInt();
-                for (Player i: playerList)
-                {
-                    if(i.getNumber()==q)
-                    {
-                        if(!(this.equals((i))))
-                        {
-                            done=true;
-                            chosenTarget=i;
-
-                            break;
-                        }
-                        else
-                        {
+                for (Player i : playerList) {
+                    if (i.getNumber() == q) {
+                        if (!(mafiaList.contains(i))) {
+                            return i;
+                        } else {
                             System.out.println("Cannot kill another mafia.");
                         }
                     }
                 }
-                if(!done)
-                {
-                    System.out.println("Invalid selection. Choose again.");
-                }
+                System.out.println("Invalid selection. Choose again.");
             } catch (InputMismatchException inp) {
                 System.out.println("Wrong input. Try again.");
             }
         }
+    }
+
+    @Override
+    public Player action2(ArrayList<Player> playerList,ArrayList<Detective>detectiveList) {
         System.out.println("Detectives have chosen a player to test");
-
         Collections.shuffle(playerList);
-        playerList.get(0).heal();
+        for(Player i:playerList)
+        {
+            if(!(detectiveList.contains(i)))
+                return i;
+        }
+        return null;
+    }
+
+    @Override
+    public Player action3(ArrayList<Player> playerList) {
         System.out.println("Healers have chosen someone to heal");
-        if(chosenTarget.getHp()>0)
-        {
-            System.out.println("No one was killed");
-        }
-        else
-        {
-            System.out.println(chosenTarget+" died.");
-            playerList.remove(chosenTarget);//remove from playerList
-            chosenTarget.kill();
-        }
+        Collections.shuffle(playerList);
+        return playerList.get(0);
     }
 
-    private void decreaseMafiaHp() {
-    }
-
+     /*if (chosenTarget.getHp() > 0) {
+        System.out.println("No one was killed");
+    } else {
+        System.out.println(chosenTarget + " died.");
+        playerList.remove(chosenTarget);//remove from playerList
+        chosenTarget.kill();
+    }*/
 
 }

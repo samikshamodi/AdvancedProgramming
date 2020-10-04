@@ -29,7 +29,7 @@ public class Main {
                 System.out.println("Wrong input. Try again.");
             }
         }
-        //System.out.println(N);
+
         System.out.println("Choose a Character\n1)Mafia\n2)Detective\n3)Healer\n4)Commoner\n5)Assign randomly");
         int op = 0;
         done = false;
@@ -48,13 +48,12 @@ public class Main {
                 System.out.println("Wrong input. Try again.");
             }
         }
-        //System.out.println(op);
+
         //if option 5 chosen, then assigning an integer from 1 to 4 randomly
         if (op == 5) {
             Random ran = new Random();
             op = ran.nextInt(3) + 1;
         }
-        //System.out.println(op);
 
         int no_mafia = N / 5;
         int no_detective = N / 5;
@@ -70,7 +69,6 @@ public class Main {
         for (int i = 0; i < N; i++) {
             assignPlayers.add(i + 1);
         }
-
         Collections.shuffle(assignPlayers);
         //TODO remove
         for (Integer i : assignPlayers)
@@ -105,19 +103,7 @@ public class Main {
         roles += "were commoner.\n";
 
 
-       /*//TODO remove
-        for (int i = 0; i < no_mafia; i++) {
-            System.out.println(mafiaList.get(i));
-        }
-        for (int i = 0; i < no_detective; i++) {
-            System.out.println(detectiveList.get(i));
-        }
-        for (int i = 0; i < no_healer; i++) {
-            System.out.println(healerList.get(i));
-        }
-        for (int i = 0; i < no_commoner; i++) {
-            System.out.println(commonerList.get(i));
-        }*/
+        //assigning roles to all players
         Player user;
         if (op == 1) {
             System.out.println("You are " + mafiaList.get(0));
@@ -147,20 +133,122 @@ public class Main {
             System.out.print("You are a commoner.");
             user = commonerList.get(0);
         }
+
+
+        //Starting game
         System.out.println();
-        int round=1;
+        int round = 1;
+        Player mafiaTarget, detectiveTarget, healerTarget, votingTarget;
         while (!endOfGame()) {
-            System.out.println("Round "+round++);
-            System.out.print(playerList.size()+" players are remaining: ");
-            for (Player i:playerList)
-            {
-                System.out.print(i+", ");
+            mafiaTarget = null;
+            detectiveTarget = null;
+            healerTarget = null;
+            votingTarget = null;
+            System.out.println("Round " + round++);
+            System.out.print(playerList.size() + " players are remaining: ");
+            for (Player i : playerList) {
+                System.out.print(i + ", ");
             }
             System.out.println("are alive.");
-            user.playAs(playerList);
+
+            //TODO add check, do an action only if mafia detective and healer are alive
+            if (no_mafia_alive() > 0)
+                mafiaTarget = user.action1(playerList, mafiaList);
+            if (no_detective_alive() > 0)
+                detectiveTarget = user.action2(playerList, detectiveList);
+            if (no_healer_alive() > 0)
+                healerTarget = user.action3(playerList);
+
+            System.out.println("----- " + mafiaTarget + detectiveTarget + healerTarget + "-----");    //TODO remove
+
+            //did someone die. reduce hp of mafia and target then print
+            //heal only if healers are alive
+            int X = mafiaTarget.getHp();
+            mafiaTakeDamage(X);
+            mafiaTargetTakeDamage(mafiaTarget);
+            if (healerTarget != null) {
+                healerTarget.heal();
+            }
+
+            if (mafiaTarget.getHp() > 0) {
+                System.out.println("No one has died");
+            } else {
+                mafiaTarget.kill();
+                playerList.remove(mafiaTarget);
+                System.out.println(mafiaTarget + " has died.");
+            }
+
+
+            //detective tested and it was mafia
+            if (no_detective_alive() > 0 && detectiveTarget != null && mafiaList.contains(detectiveTarget)) {
+                System.out.println(detectiveTarget + " has been voted out");
+                detectiveTarget.kill(); //IMPORTANT!!! whenever removing from playeerList always kill them
+                playerList.remove(detectiveTarget); //remove from playerList aka list of players still in game
+                continue;
+            }
+
+            //else if detective did not test a mafia then voting and we remove the person. KILL HIMMM
+            System.out.print("Select a person to vote out: ");
+            //try catch TODO
+
+
+            //if the user is no longer alive, then end the game;
+            if (!playerList.contains(user)) {
+                System.out.println("The Mafias have lost");
+                break;
+            }
         }
 
+
+        //Game has ended
         System.out.println("\n" + roles);
+    }
+
+    private static void mafiaTakeDamage(int X) {
+        int Y = 0;
+        for (Mafia i : mafiaList) {
+            if (i.getStatus() == "alive" && i.getHp() > 0) {
+                Y++;
+            }
+        }
+        int damage = X / Y;//TODO complete it
+    }
+
+    private static void mafiaTargetTakeDamage(Player mafiaTarget) {
+        int mafiaHp = 0;
+        for (Mafia i : mafiaList) {
+            if (i.getStatus() == "alive") {
+                mafiaHp += i.getHp();
+            }
+        }
+        mafiaTarget.setHp(Math.max(0, mafiaTarget.getHp() - mafiaHp));
+    }
+
+    private static int no_mafia_alive() {
+        int mcnt = 0;
+        for (Mafia i : mafiaList) {
+            if (i.getStatus() == "alive")
+                mcnt++;
+        }
+        return mcnt;
+    }
+
+    private static int no_detective_alive() {
+        int dcnt = 0;
+        for (Detective i : detectiveList) {
+            if (i.getStatus() == "alive")
+                dcnt++;
+        }
+        return dcnt;
+    }
+
+    private static int no_healer_alive() {
+        int hcnt = 0;
+        for (Healer i : healerList) {
+            if (i.getStatus() == "alive")
+                hcnt++;
+        }
+        return hcnt;
     }
 
     private static boolean endOfGame() {

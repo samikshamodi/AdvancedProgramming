@@ -14,7 +14,9 @@ public abstract class Player {
         this.status="alive";
     }
 
-    public abstract void playAs(ArrayList<Player> playerList);
+    public abstract Player action1(ArrayList<Player> playerList,ArrayList<Mafia>mafiaList);
+    public abstract Player action2(ArrayList<Player> playerList,ArrayList<Detective>detectiveList);
+    public abstract Player action3(ArrayList<Player> playerList);
 
     protected int getNumber() {
         return number;
@@ -44,6 +46,11 @@ public abstract class Player {
     public void kill()
     {
         status="dead";
+    }
+
+    public void setHp(int n)
+    {
+        this.hp=n;
     }
 
 

@@ -7,10 +7,19 @@ public class Healer extends Player{
         super(number,800);
     }
 
+
     @Override
-    public void playAs(ArrayList<Player> playerList) {
-        System.out.println("healer playing");
+    public Player action1(ArrayList<Player> playerList,ArrayList<Mafia>mafiaList) {
+        return null;
     }
 
+    @Override
+    public Player action2(ArrayList<Player> playerList,ArrayList<Detective>detectiveList) {
+        return null;
+    }
 
+    @Override
+    public Player action3(ArrayList<Player> playerList) {
+        return null;
+    }
 }
