@@ -1,6 +1,7 @@
 package mafiaSimulator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class Player{
 
@@ -14,9 +15,8 @@ public abstract class Player{
         this.status="alive";
     }
 
-    public abstract Player action1(ArrayList<Player> playerList,ArrayList<Mafia>mafiaList,Player user);
-    public abstract Player action2(ArrayList<Player> playerList,ArrayList<Detective>detectiveList,Player user, int no_detective_alive);
-    public abstract Player action3(ArrayList<Player> playerList,ArrayList<Healer> healerList,Player user,int no_healer_alive);
+    public abstract Player action(ArrayList<Player> playerList,Player user);
+
 
     protected int getNumber() {
         return number;
@@ -26,8 +26,8 @@ public abstract class Player{
     {
         String s="Player "+number+"-> "+hp+"-> "+status;
         return s;
-    }*/
-
+    }
+*/
     public String toString()
     {
         String s="Player "+number;
