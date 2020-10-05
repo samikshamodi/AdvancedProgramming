@@ -149,40 +149,44 @@ public class Game {
             System.out.println("are alive.");
 
             Player inputTarget = null;
-            if (user.getStatus().equals("alive")) {
-                inputTarget = user.action(playerList, user);
-
-                if (user.getClass() == Mafia.class) {
-                    mafiaTarget = inputTarget;
-                } else if (user.getClass() == Detective.class) {
-                    detectiveTarget = inputTarget;
-                } else if (user.getClass() == Healer.class) {
-                    healerTarget = inputTarget;
-                }
-            }
-
-            if(no_detective_alive()<=0)
-            {
-                detectiveTarget=null;
-            }
-            if(no_healer_alive()<=0)
-            {
-                healerTarget=null;
-            }
-
             if (user.getClass() == Mafia.class) {
+                if (user.getStatus().equals("alive")) {
+                    inputTarget = user.action(playerList);
+                    mafiaTarget = inputTarget;
+                } else {
+                    System.out.println("Mafias have chosen their target.");
+                }
                 System.out.println("Detectives have chosen a player to test");
                 System.out.println("Healers have chosen someone to heal");
             } else if (user.getClass() == Detective.class) {
                 System.out.println("Mafias have chosen their target");
+                if (user.getStatus().equals("alive")) {
+                    inputTarget = user.action(playerList);
+                    detectiveTarget = inputTarget;
+                } else {
+                    System.out.println("Detectives have chosen a player to test.");
+                }
                 System.out.println("Healers have chosen someone to heal");
             } else if (user.getClass() == Healer.class) {
                 System.out.println("Mafias have chosen their target");
                 System.out.println("Detectives have chosen a player to test");
+                if (user.getStatus().equals("alive")) {
+                    inputTarget = user.action(playerList);
+                    healerTarget = inputTarget;
+                } else {
+                    System.out.println("Healers have chosen someone to heal.");
+                }
             } else {
                 System.out.println("Mafias have chosen their target");
                 System.out.println("Detectives have chosen a player to test");
                 System.out.println("Healers have chosen someone to heal");
+            }
+
+            if (no_detective_alive() <= 0) {
+                detectiveTarget = null;
+            }
+            if (no_healer_alive() <= 0) {
+                healerTarget = null;
             }
 
             System.out.println("----- " + mafiaTarget + detectiveTarget + healerTarget + "-----");    //TODO remove
@@ -284,7 +288,7 @@ public class Game {
         if (no_detective_alive() > 0) {
             Collections.shuffle(playerList);
             for (Player i : playerList) {
-                if (!(i.getClass()==Detective.class))
+                if (!(i.getClass() == Detective.class))
                     return i;
             }
         }
@@ -295,7 +299,7 @@ public class Game {
         //  System.out.println("Mafias have chosen their target");
         Collections.shuffle(playerList);
         for (Player i : playerList) {
-            if (!(i.getClass()==Mafia.class))
+            if (!(i.getClass() == Mafia.class))
                 return i;
         }
         return null;

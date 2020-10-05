@@ -15,7 +15,7 @@ public abstract class Player{
         this.status="alive";
     }
 
-    public abstract Player action(ArrayList<Player> playerList,Player user);
+    public abstract Player action(ArrayList<Player> playerList);
 
 
     protected int getNumber() {

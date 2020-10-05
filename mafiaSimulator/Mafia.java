@@ -11,19 +11,8 @@ public class Mafia extends Player {
     }
 
     @Override
-    public Player action(ArrayList<Player> playerList, Player user) {
+    public Player action(ArrayList<Player> playerList) {
         //System.out.println("mafia playing");
-        if (user.getStatus().equals("dead")) {
-            //if user is dead, then return random
-            Collections.shuffle(playerList);
-            for (Player i : playerList) {
-                if (!(i.getClass()==Mafia.class)) {
-                    System.out.println("Mafias have chosen their target");
-                    return i;
-                }
-            }
-        }
-
         while (true) {
             try {
                 Scanner in = new Scanner(System.in);

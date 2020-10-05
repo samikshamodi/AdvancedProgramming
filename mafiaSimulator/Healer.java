@@ -12,14 +12,7 @@ public class Healer extends Player {
 
 
     @Override
-    public Player action(ArrayList<Player> playerList,Player user) {
-
-        if (user.getStatus().equals("dead")) {
-            //if user is dead, then return random
-            Collections.shuffle(playerList);
-            return playerList.get(0);
-        }
-
+    public Player action(ArrayList<Player> playerList) {
 
         //no of healer>0
         while (true) {
