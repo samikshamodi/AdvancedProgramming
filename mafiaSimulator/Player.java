@@ -2,7 +2,7 @@ package mafiaSimulator;
 
 import java.util.ArrayList;
 
-public abstract class Player {
+public abstract class Player{
 
     private int number;
     protected int hp;
@@ -24,7 +24,7 @@ public abstract class Player {
 
     public String toString()
     {
-        String s="Player "+number;
+        String s="Player "+number+"-> "+hp+"-> "+status;
         return s;
     }
 
@@ -52,6 +52,5 @@ public abstract class Player {
     {
         this.hp=n;
     }
-
 
 }

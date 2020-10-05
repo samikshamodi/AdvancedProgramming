@@ -71,10 +71,7 @@ public class Main {
         }
         Collections.shuffle(assignPlayers);
         //TODO remove
-        for (Integer i : assignPlayers)
-            System.out.print(i + " ");
-        System.out.println();
-
+        System.out.println(assignPlayers);
 
         int cnt = 0;
         for (int i = 0; i < no_mafia; i++) {
@@ -162,8 +159,8 @@ public class Main {
             //did someone die. reduce hp of mafia and target then print
             //heal only if healers are alive
             int X = mafiaTarget.getHp();
-            mafiaTakeDamage(X);
             mafiaTargetTakeDamage(mafiaTarget);
+            mafiaTakeDamage(X);
             if (healerTarget != null) {
                 healerTarget.heal();
             }
@@ -228,15 +225,15 @@ public class Main {
             }*/
         }
 
-        //TODO remove
+      /*  //TODO remove
         System.out.print(playerList.size() + " players are remaining: ");
         for (Player i : playerList) {
             System.out.print(i + ", ");
         }
-        System.out.println("are alive.");
+        System.out.println("are alive.");*/
 
         //Game has ended
-        System.out.println("\n" + roles);
+        System.out.println(roles);
     }
 
     private static void mafiaTakeDamage(int X) {
@@ -246,7 +243,35 @@ public class Main {
                 Y++;
             }
         }
-        int damage = X / Y;//TODO complete it
+        if(Y==0)
+        {
+            return;
+        }
+
+        mafiaList.sort(new hpSorter());
+        System.out.println("%%%%BEFORE"+mafiaList);//TODO remove
+        for(Mafia i:mafiaList)
+        {
+            if(i.getStatus()=="alive" && i.getHp()>0)
+            {
+                if(i.getHp()<X/Y)
+                {
+                    X-=i.getHp();
+                    i.setHp(0);
+                    Y--;
+                    if(Y==0)
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    i.setHp((i.getHp()-(X/Y)));
+                }
+            }
+        }
+        System.out.println("%%%%AFTER"+mafiaList);//TODO remove
+
     }
 
     private static void mafiaTargetTakeDamage(Player mafiaTarget) {
@@ -313,18 +338,25 @@ public class Main {
                 ccnt++;
             }
         }
-        System.out.println("---mcnt " + mcnt + "        " + (dcnt + hcnt + ccnt) + "------");
+        //System.out.println("---mcnt " + mcnt + "        " + (dcnt + hcnt + ccnt) + "------");
         //if end of game
         if (mcnt == 0) {
-            System.out.println("The Mafias have lost.");
+            System.out.println("\nGame Over\nThe Mafias have lost.");
             return true;
         } else if (mcnt == (dcnt + hcnt + ccnt)) {
-            System.out.println("The Mafias have won.");
+            System.out.println("\nGame Over\nThe Mafias have won.");
             return true;
         } else {
             return false;
         }
     }
 
+    public static class hpSorter implements Comparator<Mafia>
+    {
+        @Override
+        public int compare(Mafia o1, Mafia o2) {
+            return o1.getHp()-o2.getHp();
+        }
+    }
 }
 
