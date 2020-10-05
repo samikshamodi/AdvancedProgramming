@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public abstract class Player {
 
-    private int number;
+    private final int number;
     protected int hp;
     String status;  //alive or dead
 

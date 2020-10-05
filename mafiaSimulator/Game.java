@@ -3,11 +3,11 @@ package mafiaSimulator;
 import java.util.*;
 
 public class Game {
-    private static ArrayList<Mafia> mafiaList = new ArrayList<>();
-    private static ArrayList<Detective> detectiveList = new ArrayList<>();
-    private static ArrayList<Healer> healerList = new ArrayList<>();
-    private static ArrayList<Commoner> commonerList = new ArrayList<>();
-    private static ArrayList<Player> playerList = new ArrayList<>();
+    private static final ArrayList<Mafia> mafiaList = new ArrayList<>();
+    private static final ArrayList<Detective> detectiveList = new ArrayList<>();
+    private static final ArrayList<Healer> healerList = new ArrayList<>();
+    private static final ArrayList<Commoner> commonerList = new ArrayList<>();
+    private static final ArrayList<Player> playerList = new ArrayList<>();
 
     public static void main(String[] args) {
         int N = 0;
@@ -139,7 +139,6 @@ public class Game {
             mafiaTarget = chooseMafiaTarget();
             detectiveTarget = chooseDetectiveTarget();
             healerTarget = chooseHealerTarget();
-            votingTarget = null;
             System.out.println("\nRound " + round++);
             System.out.print(playerList.size() + " players are remaining: ");
             for (Player i : playerList) {
@@ -147,7 +146,7 @@ public class Game {
             }
             System.out.println("are alive.");
 
-            Player inputTarget = null;
+            Player inputTarget;
             if (user.getClass() == Mafia.class) {
                 if (user.getStatus().equals("alive")) {
                     inputTarget = user.action(playerList);
@@ -220,7 +219,7 @@ public class Game {
                 continue;
             }
 
-            votingTarget = playerList.get(0);//TODO REMOVE abhi !!!!
+            //votingTarget = playerList.get(0);//TODO REMOVE abhi !!!!
 
             //else if detective did not test a mafia then voting and we remove the person. KILL HIMMM
             if (user.getStatus().equals("alive")) {
