@@ -7,11 +7,9 @@ public class Commoner extends Player {
         super(number, 1000);
     }
 
-    public Player action(ArrayList<Player> playerList)
-    {
+    public Player action(ArrayList<Player> playerList) {
         return null;
     }
-
 
 
 }

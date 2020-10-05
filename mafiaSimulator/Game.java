@@ -59,7 +59,7 @@ public class Game {
         int no_detective = N / 5;
         int no_healer = Math.max(1, N / 10);
         int no_commoner = N - no_mafia - no_detective - no_healer;
-       // System.out.println(no_mafia + " " + no_detective + " " + no_healer + " " + no_commoner); //TODO remove
+        //System.out.println(no_mafia + " " + no_detective + " " + no_healer + " " + no_commoner); //TODO remove
 
 
         //result string stores all the players role
@@ -181,10 +181,10 @@ public class Game {
                 System.out.println("Healers have chosen someone to heal");
             }
 
-            if (no_detective_alive() <= 0) {
+            if (alive_cnt(detectiveList) <= 0) {
                 detectiveTarget = null;
             }
-            if (no_healer_alive() <= 0) {
+            if (alive_cnt(healerList) <= 0) {
                 healerTarget = null;
             }
 
@@ -213,7 +213,7 @@ public class Game {
 
 
             //detective tested and it was mafia
-            if (no_detective_alive() > 0 && detectiveTarget != null && detectiveTarget.getClass()==Mafia.class) {
+            if (alive_cnt(detectiveList) > 0 && detectiveTarget != null && detectiveTarget.getClass() == Mafia.class) {
                 System.out.println(detectiveTarget + " has been voted out");
                 detectiveTarget.kill(); //IMPORTANT!!! whenever removing from playeerList always kill them
                 playerList.remove(detectiveTarget); //remove from playerList aka list of players still in game
@@ -247,7 +247,7 @@ public class Game {
                 }
             }
             Collections.shuffle(playerList);    //random vote
-            //votingTarget = playerList.get(0);//TODO REMOVE abhi
+            votingTarget = playerList.get(0);//TODO remove?
             System.out.println(votingTarget + " has been voted out.");
             votingTarget.kill();
             playerList.remove(votingTarget);
@@ -274,17 +274,18 @@ public class Game {
     private static Player chooseHealerTarget() {
         //System.out.println("Healers have chosen someone to heal");
 
-        if (no_healer_alive() > 0) {
+        if (alive_cnt(healerList) > 0) {
             Collections.shuffle(playerList);
             return playerList.get(0);
         }
         return null;
     }
 
+
     private static Player chooseDetectiveTarget() {
         //System.out.println("Detectives have chosen a player to test");
 
-        if (no_detective_alive() > 0) {
+        if (alive_cnt(detectiveList) > 0) {
             Collections.shuffle(playerList);
             for (Player i : playerList) {
                 if (!(i.getClass() == Detective.class))
@@ -316,7 +317,7 @@ public class Game {
         }
 
         mafiaList.sort(new hpSorter());
-       // System.out.println("%%%%BEFORE" + mafiaList);//TODO remove
+        // System.out.println("%%%%BEFORE" + mafiaList);//TODO remove
         for (Mafia i : mafiaList) {
             if (i.getStatus().equals("alive") && i.getHp() > 0) {
                 if (i.getHp() < X / Y) {
@@ -331,7 +332,7 @@ public class Game {
                 }
             }
         }
-      //  System.out.println("%%%%AFTER" + mafiaList);//TODO remove
+        //  System.out.println("%%%%AFTER" + mafiaList);//TODO remove
 
     }
 
@@ -345,74 +346,23 @@ public class Game {
         mafiaTarget.setHp(Math.max(0, mafiaTarget.getHp() - mafiaHp));
     }
 
-    private static int no_mafia_alive() {
-        int mcnt = 0;
-        for (Mafia i : mafiaList) {
-            if (i.getStatus().equals("alive"))
-                mcnt++;
-        }
-        return mcnt;
-    }
-
-    private static int no_detective_alive() {
-        int dcnt = 0;
-        for (Detective i : detectiveList) {
-            if (i.getStatus().equals("alive"))
-                dcnt++;
-        }
-        return dcnt;
-    }
-
-    private static int no_healer_alive() {
-        int hcnt = 0;
-        for (Healer i : healerList) {
-            if (i.getStatus().equals("alive"))
-                hcnt++;
-        }
-        return hcnt;
-    }
-
-  /*  private static int alive_cnt(ArrayList<? extends Player> list)
-    {
-        int cnt=0;
-        for(Player i:list)
-        {
-            if(i.getStatus().equals("alive"))
-            {
+    private static int alive_cnt(ArrayList<? extends Player> list) {
+        int cnt = 0;
+        for (Player i : list) {
+            if (i.getStatus().equals("alive")) {
                 cnt++;
             }
         }
         return cnt;
 
-    }*/
+    }
 
     private static boolean endOfGame() {
-        int mcnt = 0;
-        int dcnt = 0;
-        int hcnt = 0;
-        int ccnt = 0;
-        for (Mafia i : mafiaList) {
-            if (i.getStatus().equals("alive")) {
-                mcnt++;
-            }
-        }
+        int mcnt = alive_cnt(mafiaList);
+        int dcnt = alive_cnt(detectiveList);
+        int hcnt = alive_cnt(healerList);
+        int ccnt = alive_cnt(commonerList);
 
-        for (Detective i : detectiveList) {
-            if (i.getStatus().equals("alive")) {
-                dcnt++;
-            }
-        }
-        for (Healer i : healerList) {
-            if (i.getStatus().equals("alive")) {
-                hcnt++;
-            }
-        }
-
-        for (Commoner i : commonerList) {
-            if (i.getStatus().equals("alive")) {
-                ccnt++;
-            }
-        }
         //System.out.println("---mcnt " + mcnt + "        " + (dcnt + hcnt + ccnt) + "------");
         //if end of game
         if (mcnt == 0) {

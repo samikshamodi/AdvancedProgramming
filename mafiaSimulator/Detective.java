@@ -12,7 +12,6 @@ public class Detective extends Player {
 
     @Override
     public Player action(ArrayList<Player> playerList) {
-
         //no of detective >0
         while (true) {
             try {
@@ -21,7 +20,7 @@ public class Detective extends Player {
                 int q = in.nextInt();
                 for (Player i : playerList) {
                     if (i.getNumber() == q) {
-                        if (!(i.getClass()==Detective.class)) {
+                        if (!(i.getClass() == Detective.class)) {
                             if (i.getClass() == Mafia.class)
                                 System.out.println(i + " is a mafia.");
                             else {
