@@ -35,7 +35,7 @@ public class Commoner extends Player {
     }
 
     @Override
-    public Player action3(ArrayList<Player> playerList,Player user,int no_healer_alive) {
+    public Player action3(ArrayList<Player> playerList,ArrayList<Healer> healerList,Player user,int no_healer_alive) {
         System.out.println("Healers have chosen someone to heal");
 
         if (no_healer_alive > 0) {

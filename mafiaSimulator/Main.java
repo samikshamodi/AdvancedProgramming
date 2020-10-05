@@ -151,7 +151,7 @@ public class Main {
             //TODO add check, do an action only if mafia detective and healer are alive
             mafiaTarget = user.action1(playerList, mafiaList, user);
             detectiveTarget = user.action2(playerList, detectiveList, user,no_detective_alive());
-            healerTarget = user.action3(playerList, user,no_healer_alive());
+            healerTarget = user.action3(playerList,healerList ,user,no_healer_alive());
 
             System.out.println("----- " + mafiaTarget + detectiveTarget + healerTarget + "-----");    //TODO remove
 

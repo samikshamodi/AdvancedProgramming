@@ -37,7 +37,7 @@ public class Healer extends Player {
     }
 
     @Override
-    public Player action3(ArrayList<Player> playerList, Player user, int no_healer_alive) {
+    public Player action3(ArrayList<Player> playerList, ArrayList<Healer> healerList,Player user, int no_healer_alive) {
         System.out.println("No of healer alive : " + no_healer_alive);      //TODO remove
         if (no_healer_alive <= 0) {
             System.out.println("Healers have chosen someone to heal.");
