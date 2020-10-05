@@ -28,6 +28,12 @@ public abstract class Player{
         return s;
     }
 
+   /* public String toString()
+    {
+        String s="Player "+number;
+        return s;
+    }
+*/
     public String getStatus()
     {
         return status;

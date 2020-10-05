@@ -10,13 +10,17 @@ public class Detective extends Player {
         super(number, 800);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj.getClass()==this.getClass();
+    }
 
     @Override
     public Player action1(ArrayList<Player> playerList, ArrayList<Mafia> mafiaList, Player user) {
         System.out.println("Mafias have chosen their target");
         Collections.shuffle(playerList);
         for (Player i : playerList) {
-            if (!(mafiaList.contains(i)))
+            if (!new Mafia(0).equals(i))
                 return i;
         }
         return null;
@@ -32,11 +36,11 @@ public class Detective extends Player {
             return null;
         }
 
-        if (user.getStatus() == "dead") {
+        if (user.getStatus().equals("dead")) {
             //if user is dead, then return random
             Collections.shuffle(playerList);
             for (Player i : playerList) {
-                if (!(detectiveList.contains(i))) {
+                if (!new Detective(0).equals(i)) {
                     System.out.println("Detectives have chosen a player to test");
                     return i;
                 }
@@ -51,8 +55,8 @@ public class Detective extends Player {
                     int q = in.nextInt();
                     for (Player i : playerList) {
                         if (i.getNumber() == q) {
-                            if (!(detectiveList.contains(i))) {
-                                if (i.getClass() == new Mafia(100).getClass())
+                            if (!new Detective(0).equals(i)) {
+                                if (new Mafia(0).equals(i))
                                     System.out.println(i + " is a mafia.");
                                 else {
                                     System.out.println(i + " is not a mafia.");

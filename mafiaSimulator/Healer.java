@@ -10,13 +10,17 @@ public class Healer extends Player {
         super(number, 800);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj.getClass()==this.getClass();
+    }
 
     @Override
     public Player action1(ArrayList<Player> playerList, ArrayList<Mafia> mafiaList, Player user) {
         System.out.println("Mafias have chosen their target");
         Collections.shuffle(playerList);
         for (Player i : playerList) {
-            if (!(mafiaList.contains(i)))
+            if (!new Mafia(0).equals(i))
                 return i;
         }
         return null;
@@ -29,7 +33,7 @@ public class Healer extends Player {
         if (no_detective_alive > 0) {
             Collections.shuffle(playerList);
             for (Player i : playerList) {
-                if (!(detectiveList.contains(i)))
+                if (!new Detective(0).equals(i))
                     return i;
             }
         }
@@ -44,7 +48,7 @@ public class Healer extends Player {
             return null;
         }
 
-        if (user.getStatus() == "dead") {
+        if (user.getStatus().equals("dead")) {
             //if user is dead, then return random
             Collections.shuffle(playerList);
             System.out.println("Detectives have chosen a player to test");

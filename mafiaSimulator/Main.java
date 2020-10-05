@@ -63,7 +63,7 @@ public class Main {
 
 
         //result string stores all the players role
-        String roles = "";
+        StringBuilder roles = new StringBuilder();
 
         ArrayList<Integer> assignPlayers = new ArrayList<>();
         for (int i = 0; i < N; i++) {
@@ -76,28 +76,28 @@ public class Main {
         int cnt = 0;
         for (int i = 0; i < no_mafia; i++) {
             mafiaList.add(new Mafia(assignPlayers.get(cnt++)));
-            roles += mafiaList.get(i) + ", ";
+            roles.append(mafiaList.get(i)).append(", ");
             playerList.add(mafiaList.get(i));
         }
-        roles += "were mafia.\n";
+        roles.append("were mafia.\n");
         for (int i = 0; i < no_detective; i++) {
             detectiveList.add(new Detective(assignPlayers.get(cnt++)));
-            roles += detectiveList.get(i) + ", ";
+            roles.append(detectiveList.get(i)).append(", ");
             playerList.add(detectiveList.get(i));
         }
-        roles += "were detective.\n";
+        roles.append("were detective.\n");
         for (int i = 0; i < no_healer; i++) {
             healerList.add(new Healer(assignPlayers.get(cnt++)));
-            roles += healerList.get(i) + ", ";
+            roles.append(healerList.get(i)).append(", ");
             playerList.add(healerList.get(i));
         }
-        roles += "were healer.\n";
+        roles.append("were healer.\n");
         for (int i = 0; i < no_commoner; i++) {
             commonerList.add(new Commoner(assignPlayers.get(cnt++)));
-            roles += commonerList.get(i) + ", ";
+            roles.append(commonerList.get(i)).append(", ");
             playerList.add(commonerList.get(i));
         }
-        roles += "were commoner.\n";
+        roles.append("were commoner.\n");
 
 
         //assigning roles to all players
@@ -150,8 +150,8 @@ public class Main {
 
             //TODO add check, do an action only if mafia detective and healer are alive
             mafiaTarget = user.action1(playerList, mafiaList, user);
-            detectiveTarget = user.action2(playerList, detectiveList, user,no_detective_alive());
-            healerTarget = user.action3(playerList, user,no_healer_alive());
+            detectiveTarget = user.action2(playerList, detectiveList, user, no_detective_alive());
+            healerTarget = user.action3(playerList, user, no_healer_alive());
 
             System.out.println("----- " + mafiaTarget + detectiveTarget + healerTarget + "-----");    //TODO remove
 
@@ -170,6 +170,7 @@ public class Main {
             } else {
                 mafiaTarget.kill();
                 playerList.remove(mafiaTarget);
+                System.out.println("---Active players: "+ playerList);
                 System.out.println(mafiaTarget + " has died.");
             }
             //after killing check if game has ended
@@ -178,7 +179,7 @@ public class Main {
 
 
             //detective tested and it was mafia
-            if (no_detective_alive() > 0 && detectiveTarget != null && mafiaList.contains(detectiveTarget)) {
+            if (no_detective_alive() > 0 && detectiveTarget != null && new Mafia(0).equals(detectiveTarget)) {
                 System.out.println(detectiveTarget + " has been voted out");
                 detectiveTarget.kill(); //IMPORTANT!!! whenever removing from playeerList always kill them
                 playerList.remove(detectiveTarget); //remove from playerList aka list of players still in game
@@ -188,7 +189,7 @@ public class Main {
             votingTarget = playerList.get(0);//TODO REMOVE abhi !!!!!!!!!!!!!!!!!!
 
             //else if detective did not test a mafia then voting and we remove the person. KILL HIMMM
-            if (user.getStatus() == "alive") {
+            if (user.getStatus().equals("alive")) {
                 done = false;
                 while (!done) {
                     try {
@@ -213,7 +214,7 @@ public class Main {
             }
             Collections.shuffle(playerList);    //random vote
             //votingTarget = playerList.get(0);//TODO REMOVE abhi
-            System.out.println(votingTarget+" has been voted out.");
+            System.out.println(votingTarget + " has been voted out.");
             votingTarget.kill();
             playerList.remove(votingTarget);
 
@@ -239,45 +240,38 @@ public class Main {
     private static void mafiaTakeDamage(int X) {
         int Y = 0;
         for (Mafia i : mafiaList) {
-            if (i.getStatus() == "alive" && i.getHp() > 0) {
+            if (i.getStatus().equals("alive") && i.getHp() > 0) {
                 Y++;
             }
         }
-        if(Y==0)
-        {
+        if (Y == 0) {
             return;
         }
 
         mafiaList.sort(new hpSorter());
-        System.out.println("%%%%BEFORE"+mafiaList);//TODO remove
-        for(Mafia i:mafiaList)
-        {
-            if(i.getStatus()=="alive" && i.getHp()>0)
-            {
-                if(i.getHp()<X/Y)
-                {
-                    X-=i.getHp();
+        System.out.println("%%%%BEFORE" + mafiaList);//TODO remove
+        for (Mafia i : mafiaList) {
+            if (i.getStatus().equals("alive") && i.getHp() > 0) {
+                if (i.getHp() < X / Y) {
+                    X -= i.getHp();
                     i.setHp(0);
                     Y--;
-                    if(Y==0)
-                    {
+                    if (Y == 0) {
                         return;
                     }
-                }
-                else
-                {
-                    i.setHp((i.getHp()-(X/Y)));
+                } else {
+                    i.setHp((i.getHp() - (X / Y)));
                 }
             }
         }
-        System.out.println("%%%%AFTER"+mafiaList);//TODO remove
+        System.out.println("%%%%AFTER" + mafiaList);//TODO remove
 
     }
 
     private static void mafiaTargetTakeDamage(Player mafiaTarget) {
         int mafiaHp = 0;
         for (Mafia i : mafiaList) {
-            if (i.getStatus() == "alive") {
+            if (i.getStatus().equals("alive")) {
                 mafiaHp += i.getHp();
             }
         }
@@ -287,7 +281,7 @@ public class Main {
     private static int no_mafia_alive() {
         int mcnt = 0;
         for (Mafia i : mafiaList) {
-            if (i.getStatus() == "alive")
+            if (i.getStatus().equals("alive"))
                 mcnt++;
         }
         return mcnt;
@@ -296,7 +290,7 @@ public class Main {
     private static int no_detective_alive() {
         int dcnt = 0;
         for (Detective i : detectiveList) {
-            if (i.getStatus() == "alive")
+            if (i.getStatus().equals("alive"))
                 dcnt++;
         }
         return dcnt;
@@ -305,7 +299,7 @@ public class Main {
     private static int no_healer_alive() {
         int hcnt = 0;
         for (Healer i : healerList) {
-            if (i.getStatus() == "alive")
+            if (i.getStatus().equals("alive"))
                 hcnt++;
         }
         return hcnt;
@@ -317,24 +311,24 @@ public class Main {
         int hcnt = 0;
         int ccnt = 0;
         for (Mafia i : mafiaList) {
-            if (i.getStatus() == "alive") {
+            if (i.getStatus().equals("alive")) {
                 mcnt++;
             }
         }
 
         for (Detective i : detectiveList) {
-            if (i.getStatus() == "alive") {
+            if (i.getStatus().equals("alive")) {
                 dcnt++;
             }
         }
         for (Healer i : healerList) {
-            if (i.getStatus() == "alive") {
+            if (i.getStatus().equals("alive")) {
                 hcnt++;
             }
         }
 
         for (Commoner i : commonerList) {
-            if (i.getStatus() == "alive") {
+            if (i.getStatus().equals("alive")) {
                 ccnt++;
             }
         }
@@ -351,12 +345,66 @@ public class Main {
         }
     }
 
-    public static class hpSorter implements Comparator<Mafia>
-    {
+    public static class hpSorter implements Comparator<Mafia> {
         @Override
         public int compare(Mafia o1, Mafia o2) {
-            return o1.getHp()-o2.getHp();
+            return o1.getHp() - o2.getHp();
         }
     }
+
 }
 
+/*
+
+
+    Welcome to Mafia
+        Enter number of Players:10
+        Choose a Character
+        1)Mafia
+        2)Detective
+        3)Healer
+        4)Commoner
+        5)Assign randomly
+        Option:1
+        2 2 1 5
+        [3, 7, 8, 4, 2, 5, 6, 9, 10, 1]
+        You are Player 3
+        You are a mafia. Other mafias are: Player 7,
+
+        Round 1
+        10 players are remaining: Player 3, Player 7, Player 8, Player 4, Player 2, Player 5, Player 6, Player 9, Player 10, Player 1, are alive.
+        Choose a target: 7
+        Cannot kill another mafia.
+        Invalid selection. Choose again.
+        Choose a target: 3
+        Cannot kill another mafia.
+        Invalid selection. Choose again.
+        Choose a target: 2
+        Detectives have chosen a player to test
+        Healers have chosen someone to heal
+        ----- Player 2Player 5Player 9-----
+        %%%%BEFORE[Player 3, Player 7]
+        %%%%AFTER[Player 3, Player 7]
+        Player 2 has died.
+        Select a person to vote out: 5
+        Player 5 has been voted out.
+
+        Round 2
+        8 players are remaining: Player 10, Player 1, Player 6, Player 8, Player 9, Player 3, Player 4, Player 7, are alive.
+        Choose a target: 8
+        Detectives have chosen a player to test
+        Healers have chosen someone to heal
+        ----- Player 8Player 10null-----
+        %%%%BEFORE[Player 3, Player 7]
+        %%%%AFTER[Player 3, Player 7]
+        Player 8 has died.
+        Select a person to vote out: 4
+        Invalid selection. Choose again.
+        Select a person to vote out: 4
+        Invalid selection. Choose again.
+        Select a person to vote out: 7
+        Player 7 has been voted out.
+
+        Round 3
+        6 players are remaining: Player 1, Player 3, Player 9, Player 8, Player 10, Player 6, are alive.
+*/
