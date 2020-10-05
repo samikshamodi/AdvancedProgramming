@@ -1,7 +1,6 @@
 package mafiaSimulator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public abstract class Player{
 
@@ -30,8 +29,7 @@ public abstract class Player{
 */
     public String toString()
     {
-        String s="Player "+number;
-        return s;
+        return "Player "+number;
     }
 
     public String getStatus()

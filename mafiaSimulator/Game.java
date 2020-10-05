@@ -59,7 +59,7 @@ public class Game {
         int no_detective = N / 5;
         int no_healer = Math.max(1, N / 10);
         int no_commoner = N - no_mafia - no_detective - no_healer;
-        System.out.println(no_mafia + " " + no_detective + " " + no_healer + " " + no_commoner); //TODO remove
+       // System.out.println(no_mafia + " " + no_detective + " " + no_healer + " " + no_commoner); //TODO remove
 
 
         //result string stores all the players role
@@ -70,8 +70,7 @@ public class Game {
             assignPlayers.add(i + 1);
         }
         Collections.shuffle(assignPlayers);
-        //TODO remove
-        System.out.println(assignPlayers);
+        //System.out.println(assignPlayers);//TODO remove
 
         int cnt = 0;
         for (int i = 0; i < no_mafia; i++) {
@@ -189,7 +188,7 @@ public class Game {
                 healerTarget = null;
             }
 
-            System.out.println("----- " + mafiaTarget + detectiveTarget + healerTarget + "-----");    //TODO remove
+            //System.out.println("----- " + mafiaTarget + detectiveTarget + healerTarget + "-----");    //TODO remove
 
 
             //did someone die. reduce hp of mafia and target then print
@@ -214,14 +213,14 @@ public class Game {
 
 
             //detective tested and it was mafia
-            if (no_detective_alive() > 0 && detectiveTarget != null && mafiaList.contains(detectiveTarget)) {
+            if (no_detective_alive() > 0 && detectiveTarget != null && detectiveTarget.getClass()==Mafia.class) {
                 System.out.println(detectiveTarget + " has been voted out");
                 detectiveTarget.kill(); //IMPORTANT!!! whenever removing from playeerList always kill them
                 playerList.remove(detectiveTarget); //remove from playerList aka list of players still in game
                 continue;
             }
 
-            votingTarget = playerList.get(0);//TODO REMOVE abhi !!!!!!!!!!!!!!!!!!
+            votingTarget = playerList.get(0);//TODO REMOVE abhi !!!!
 
             //else if detective did not test a mafia then voting and we remove the person. KILL HIMMM
             if (user.getStatus().equals("alive")) {
@@ -261,12 +260,12 @@ public class Game {
             }*/
         }
 
-        //TODO remove
+        /*//TODO remove
         System.out.print(playerList.size() + " players are remaining: ");
         for (Player i : playerList) {
             System.out.print(i + ", ");
         }
-        System.out.println("are alive.");
+        System.out.println("are alive.");*/
 
         //Game has ended
         System.out.println(roles);
@@ -317,7 +316,7 @@ public class Game {
         }
 
         mafiaList.sort(new hpSorter());
-        System.out.println("%%%%BEFORE" + mafiaList);//TODO remove
+       // System.out.println("%%%%BEFORE" + mafiaList);//TODO remove
         for (Mafia i : mafiaList) {
             if (i.getStatus().equals("alive") && i.getHp() > 0) {
                 if (i.getHp() < X / Y) {
@@ -332,7 +331,7 @@ public class Game {
                 }
             }
         }
-        System.out.println("%%%%AFTER" + mafiaList);//TODO remove
+      //  System.out.println("%%%%AFTER" + mafiaList);//TODO remove
 
     }
 
@@ -372,6 +371,20 @@ public class Game {
         }
         return hcnt;
     }
+
+  /*  private static int alive_cnt(ArrayList<? extends Player> list)
+    {
+        int cnt=0;
+        for(Player i:list)
+        {
+            if(i.getStatus().equals("alive"))
+            {
+                cnt++;
+            }
+        }
+        return cnt;
+
+    }*/
 
     private static boolean endOfGame() {
         int mcnt = 0;
